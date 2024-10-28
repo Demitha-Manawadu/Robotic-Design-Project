@@ -9,7 +9,7 @@ void OLEDDisplay::init() {
     for (;;);  // Don't proceed, loop forever
   }
   display.clearDisplay();
-  display.setTextSize(1);
+  display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.display();
@@ -22,7 +22,7 @@ void OLEDDisplay::clear() {
 
 void OLEDDisplay::printMessage(String message) {
   display.clearDisplay();
-  display.setCursor(0, 0);
+  display.setCursor(5, 10);
   display.print(message);
   display.display();
 }
