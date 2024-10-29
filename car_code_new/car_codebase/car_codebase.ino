@@ -9,12 +9,13 @@
 #include "LineFollowAndTurn.h"
 
 Buzzer buzzer;  // Initialize the Buzzer object
+ColorSensor colorSensor;
 
 const int threshold = 500;  // Set your desired threshold for line detection
 const int maxLines = 3;      // Max lines to detect before stopping
 const int targetSpeed = 180; // Desired speed for moving forward
 
-ColorSensorHandler colorHandler;
+//ColorSensorHandler colorHandler;
 BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set threshold to 500, stop after 3 lines
 OLEDDisplay oled;
 
@@ -31,14 +32,16 @@ void setup() {
   setupSensors();
   buzzer.playBeep(); 
   setupEncoders();
+  colorSensor.initialize(); 
   barcodeDetector.init();      // Initialize barcode detection (sensors and display)
   Serial.begin(9600);
 }
 
 void loop() {
+  colorSensor.detectColor();
    // Play a beep before starting line-following
    buzzer.playBeep();
-
+  
    // Call the line-following function with square detection
    followLineAndTurnWithSquareDetection();
 

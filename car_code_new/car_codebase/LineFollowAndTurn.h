@@ -1,6 +1,6 @@
 #ifndef LINEFOLLOWANDTURN_H
 #define LINEFOLLOWANDTURN_H
-
+#include "ColorSensor.h"
 #include <Arduino.h>
 #include "SensorControl.h"
 // Define the number of sensors and the sensor array
