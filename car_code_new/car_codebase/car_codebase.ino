@@ -6,7 +6,7 @@
 #include "BarcodeDetection.h"
 #include "Buzzer.h"
 #include "ColorSensor.h"
-
+#include "LineFollowAndTurn.h"
 
 Buzzer buzzer;  // Initialize the Buzzer object
 
@@ -32,8 +32,12 @@ void setup() {
 
 void loop() {
    // handleBlackDetectionAndDisplay();
-    colorHandler.printAllSensorRGBValues();
-  delay(4000);
+   moveForward(180,180);
+   delay(300);
+    moveForward(0,0);
+    buzzer.playBeep();
+    followLineAndTurn();
+    buzzer.playBeep();
    }
   //runForwardWithSensorPID();
   // Example: running the task for box position 0

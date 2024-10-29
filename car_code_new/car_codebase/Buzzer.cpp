@@ -5,6 +5,11 @@
 Buzzer::Buzzer() {
     pinMode(BUZZER_PIN, OUTPUT);  // Set the fixed buzzer pin as output
 }
+void Buzzer::playBeep() {
+    tone(BUZZER_PIN, 1000, 200);  // Play a 200ms beep at 1000Hz frequency
+    delay(250);  // Short delay between beeps
+}
+
 
 void Buzzer::playMelody() {
     // Define melody notes and their durations

@@ -15,7 +15,6 @@ void runForwardWithoutPID(long targetCount) {
     while (abs(leftEncoderCount) < targetCount && abs(rightEncoderCount) < targetCount) {
         moveForward(180, 180);  // Move both motors at a fixed speed
     }
-
     // Stop the motors after reaching the target count
     moveForward(0, 0);
 }

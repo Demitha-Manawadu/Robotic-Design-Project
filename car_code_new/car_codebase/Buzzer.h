@@ -7,6 +7,7 @@ class Buzzer {
 public:
     Buzzer();          // Constructor without pin argument
     void playMelody(); // Function to play a melody
+    void playBeep(); 
 };
 
 #endif

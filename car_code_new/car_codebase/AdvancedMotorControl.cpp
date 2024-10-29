@@ -22,7 +22,7 @@ float backwardIntegral = 0;
 void runForwardWithSensorPID() {
   Serial.println("Running Forward with Sensor Array PID...");
 
-  while (true) {  // Infinite loop to keep running until some external condition breaks the loop
+   // Infinite loop to keep running until some external condition breaks the loop
     // Read and normalize sensor values
     readSensors();
 
@@ -40,7 +40,7 @@ void runForwardWithSensorPID() {
     forwardLastError = error;
 
     // Adjust the motor speeds based on the PID output
-    int baseSpeed = 180;
+    int baseSpeed = 100;
     int leftSpeed = baseSpeed + output;
     int rightSpeed = baseSpeed - output;
 
@@ -50,13 +50,9 @@ void runForwardWithSensorPID() {
 
     // Move the car forward with the calculated speeds
     moveForward(leftSpeed, rightSpeed);
-
+    delay(20);
     // You can add a break condition here if needed
     // Example: if (someConditionMet) { break; }
-  }
-
-  // Stop the motors after forward motion
-  moveForward(0, 0);
 }
 
 // Function to run backward using PID of the encoders (without time constraint)
