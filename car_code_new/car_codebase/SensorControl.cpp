@@ -15,8 +15,16 @@ void setupSensors() {
   calibrateSensors();
 }
 
+#include "OLED_Display.h"
+
+// Assuming `oled` is an instance of `OLEDDisplay` created in the main code
+extern OLEDDisplay oled;
+
 void calibrateSensors() {
-  for (int j = 0; j < 200; j++) {
+  // Display "Calibrating..." message
+  oled.printMessage("Calibrating...");
+
+  for (int j = 0; j < 400; j++) {
     for (int i = 0; i < NUM_SENSORS; i++) {
       int sensorValue = analogRead(sensorPins[i]);
       if (sensorValue < calibratedMin[i]) {
@@ -28,7 +36,14 @@ void calibrateSensors() {
     }
     delay(20);
   }
+
+  // Clear the display or show a completion message once calibration is done
+  oled.clear();
+  oled.printMessage("Calibration Complete");
+  delay(1000);  // Optional delay to show the completion message for 1 second
+  oled.clear();  // Clear the display after showing the message
 }
+
 
 void readSensors() {
   for (int i = 0; i < NUM_SENSORS; i++) {

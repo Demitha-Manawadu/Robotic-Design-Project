@@ -1,4 +1,3 @@
-// OLED_Display.cpp
 #include "OLED_Display.h"
 
 OLEDDisplay::OLEDDisplay() : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET) {}
@@ -33,4 +32,19 @@ void OLEDDisplay::printSensorData(int sensorValue) {
   display.print("Sensor Value: ");
   display.print(sensorValue);
   display.display();
+}
+
+// New function for scrolling text animation
+void OLEDDisplay::displayScrollingName() {
+  String name = "Viro Ventures";
+  int textWidth = name.length() * 12;  // Estimate width, adjust if needed
+  
+  // Start from the right edge of the screen
+  for (int x = SCREEN_WIDTH; x > -textWidth; x -= 4) {  // Increase x decrement to make it scroll faster
+    display.clearDisplay();
+    display.setCursor(x, 20);  // Y-position can be adjusted for vertical centering
+    display.print(name);
+    display.display();
+    delay(10);  // Reduced delay to speed up scrolling
+  }
 }

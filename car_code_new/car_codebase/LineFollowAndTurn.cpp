@@ -4,18 +4,54 @@
 #include "AdvancedMotorControl.h"
 #include "MotorControl.h"
 
-// Define the sensor array and corner detection flag
+// Define the sensor array and detection flags
 bool cornerDetected = false;
+bool squareDetected = false;  // New flag to detect the black square
 
-void followLineAndTurn() {
+void followLineAndTurnWithSquareDetection() {
   cornerDetected = false;
 
-  // Loop for line-following with PID, handling junctions and corners
-  while (!cornerDetected) {
+  // Loop for line-following with PID, handling junctions, corners, and square detection
+  while (!cornerDetected && !squareDetected) {
     runForwardWithSensorPID();  // Follow the line
 
     readSensors();  // Update sensor values
 
+    // Check if all sensors detect black (indicating a black square)
+    bool allSensorsDetectBlack = true;
+    for (int i = 0; i < NUM_SENSORS; i++) {
+      if (sensorValues[i] != 0) {  // If any sensor does not detect black, break
+        allSensorsDetectBlack = false;
+        break;
+      }
+    }
+
+    if (allSensorsDetectBlack) {
+      // Confirm the square detection by maintaining the condition for 200 ms
+      unsigned long squareDetectionStart = millis();
+      while (millis() - squareDetectionStart < 200) {  // Confirmation period
+        readSensors();
+        allSensorsDetectBlack = true;
+        for (int i = 0; i < NUM_SENSORS; i++) {
+          if (sensorValues[i] != 0) {  // Any sensor not detecting black cancels the detection
+            allSensorsDetectBlack = false;
+            break;
+          }
+        }
+        if (!allSensorsDetectBlack) {
+          break;  // Exit if the condition isn't met
+        }
+      }
+
+      if (allSensorsDetectBlack) {
+        squareDetected = true;
+        moveForward(0, 0);  // Stop the robot
+        Serial.println("Black square detected. Stopping.");
+        return;  // Exit the function upon square detection
+      }
+    }
+
+    // Existing corner and 4-way junction logic here
     // Check for a 4-way junction: both left and right detect the line briefly
     if (sensorValues[0] == 1 && sensorValues[1] == 1 && 
         sensorValues[NUM_SENSORS - 1] == 1 && sensorValues[NUM_SENSORS - 2] == 1) {
@@ -44,7 +80,7 @@ void followLineAndTurn() {
 
       if (leftCornerConfirmed) {
         moveForward(0, 0);  // Stop briefly
-        delay(400);
+        //delay(400);
         runForwardWithoutPID(200);  // Stabilize with forward motion
         delay(400);
         turnByAngleWithPID(-90);  // Turn 90 degrees left
@@ -72,7 +108,7 @@ void followLineAndTurn() {
 
       if (rightCornerConfirmed) {
         moveForward(0, 0);  // Stop briefly
-        delay(400);
+        //delay(400);
         runForwardWithoutPID(200);  // Stabilize with forward motion
         delay(400);
         turnByAngleWithPID(90);  // Turn 90 degrees right
@@ -86,7 +122,7 @@ void followLineAndTurn() {
 // Corrector function for PID adjustments after turns
 void corrector() {
   unsigned long startTime = millis();
-  while (millis() - startTime < 1000) {  // Run for approximately 1 second
+  while (millis() - startTime < 400) {  // Run for approximately 1 second
     runForwardWithSensorPID();
   }
 }

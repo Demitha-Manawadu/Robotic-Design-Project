@@ -8,7 +8,7 @@
 extern int sensorValues[NUM_SENSORS];
 
 // Function declarations
-void runForwardWithSensorPID();  // Your existing function for line-following with PID
+void followLineAndTurnWithSquareDetection();  // Your existing function for line-following with PID
 void turnByAngleWithPID(int angle);  // Your existing function for turning with PID
 void followLineAndTurn();  // Function to follow the line and turn when needed
 void moveForward(int leftSpeed, int rightSpeed);

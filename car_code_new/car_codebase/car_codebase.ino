@@ -10,43 +10,49 @@
 
 Buzzer buzzer;  // Initialize the Buzzer object
 
-
 const int threshold = 500;  // Set your desired threshold for line detection
 const int maxLines = 3;      // Max lines to detect before stopping
 const int targetSpeed = 180; // Desired speed for moving forward
-
 
 ColorSensorHandler colorHandler;
 BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set threshold to 500, stop after 3 lines
 OLEDDisplay oled;
 
 void setup() {
+  buzzer.playBeep(); 
+  buzzer.playBeep(); 
+  buzzer.playBeep(); 
+  buzzer.playBeep(); 
+  delay(500);
   oled.init();
-  oled.printMessage("<<<< WE ARE VIRO VENTURES >>>>");
+  oled.displayScrollingName();
   setupMotors();
+  buzzer.playBeep(); 
   setupSensors();
+  buzzer.playBeep(); 
   setupEncoders();
   barcodeDetector.init();      // Initialize barcode detection (sensors and display)
   Serial.begin(9600);
 }
 
 void loop() {
-   // handleBlackDetectionAndDisplay();
-   moveForward(180,180);
-   delay(300);
-    moveForward(0,0);
-    buzzer.playBeep();
-    followLineAndTurn();
-    buzzer.playBeep();
+   // Play a beep before starting line-following
+   buzzer.playBeep();
+
+   // Call the line-following function with square detection
+   followLineAndTurnWithSquareDetection();
+
+   // After detecting the white square
+   buzzer.playBeep();
+   buzzer.playBeep();
+   buzzer.playBeep();
+     // Play a beep to signal square detection
+   oled.printMessage("White square detected. Stopping.");
+
+   // Optional: Stop the robot or enter a halt state
+   while (true) {
+     // Keep the robot stopped or perform other actions as needed
+     moveForward(0, 0);  // Ensure motors are stopped
+     delay(1000);  // Prevent fast looping in halt state
    }
-  //runForwardWithSensorPID();
-  // Example: running the task for box position 0
-
-
-//  barcodeDetector.update();     // Run the entire detection process
-//     if (barcodeDetector.isCompleted()) {
-//         // Optionally, do something when detection is complete
-//         oled.printMessage("Barcode detection completed.");
-//         while (true); // Stop the loop or perform other actions
-
-//     }}
+}
