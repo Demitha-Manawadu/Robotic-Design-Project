@@ -5,8 +5,8 @@
 #include <Arduino.h>
 #include "SensorControl.h"
 
-#define NUM_SENSORS 8
-extern int sensorValues[NUM_SENSORS];  // Declare sensorValues array
+//#define NUM_SENSORS 8
+//extern int sensorValues[NUM_SENSORS];  // Declare sensorValues array
 extern int pathcolor;                 // Declare pathcolor as an external variable
-
+void task_2();
 #endif

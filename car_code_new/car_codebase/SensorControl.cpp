@@ -24,7 +24,7 @@ void calibrateSensors() {
   // Display "Calibrating..." message
   oled.printMessage("Calibrating...");
 
-  for (int j = 0; j < 400; j++) {
+  for (int j = 0; j < 200; j++) {
     for (int i = 0; i < NUM_SENSORS; i++) {
       int sensorValue = analogRead(sensorPins[i]);
       if (sensorValue < calibratedMin[i]) {

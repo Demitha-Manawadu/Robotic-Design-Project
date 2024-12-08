@@ -27,13 +27,13 @@ void setup() {
   // buzzer.playBeep(); 
   // delay(500);
   oled.init();
-  oled.displayScrollingName();
+  //oled.displayScrollingName();
   setupMotors();
   buzzer.playBeep(); 
   setupSensors();
   buzzer.playBeep();    
   setupEncoders();
-  colorSensor.initialize(); 
+  //colorSensor.initialize(); 
   //barcodeDetector.init();      // Initialize barcode detection (sensors and display)
   Serial.begin(9600);
 
@@ -41,8 +41,8 @@ void setup() {
 
 void loop() {
   
-  // colorSensor.detectColor();
-  //  // Play a beep before starting line-following
+  //colorSensor.detectColor();
+   // Play a beep before starting line-following
   //  buzzer.playBeep();
   
   //  // color line follow 
@@ -54,7 +54,7 @@ void loop() {
   //  buzzer.playBeep();
   //    // Play a beep to signal square detection
   //  oled.printMessage("White square detected. Stopping.");
-    while (true){runForwardWithSensorPID();}
+   task_2();
    // Optional: Stop the robot or enter a halt state
    while (true) {
      // Keep the robot stopped or perform other actions as needed
