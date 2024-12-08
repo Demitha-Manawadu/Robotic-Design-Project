@@ -7,6 +7,7 @@
 #include "Buzzer.h"
 #include "ColorSensor.h"
 #include "LineFollowAndTurn.h"
+#include "task2.h"
 
 Buzzer buzzer;  // Initialize the Buzzer object
 ColorSensor colorSensor;
@@ -20,38 +21,40 @@ BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set thre
 OLEDDisplay oled;
 
 void setup() {
-  buzzer.playBeep(); 
-  buzzer.playBeep(); 
-  buzzer.playBeep(); 
-  buzzer.playBeep(); 
-  delay(500);
+  // buzzer.playBeep(); 
+  // buzzer.playBeep(); 
+  // buzzer.playBeep(); 
+  // buzzer.playBeep(); 
+  // delay(500);
   oled.init();
   oled.displayScrollingName();
   setupMotors();
   buzzer.playBeep(); 
   setupSensors();
-  buzzer.playBeep(); 
+  buzzer.playBeep();    
   setupEncoders();
   colorSensor.initialize(); 
-  barcodeDetector.init();      // Initialize barcode detection (sensors and display)
+  //barcodeDetector.init();      // Initialize barcode detection (sensors and display)
   Serial.begin(9600);
+
 }
 
 void loop() {
-  colorSensor.detectColor();
-   // Play a beep before starting line-following
-   buzzer.playBeep();
   
-   // Call the line-following function with square detection
-   followLineAndTurnWithSquareDetection();
+  // colorSensor.detectColor();
+  //  // Play a beep before starting line-following
+  //  buzzer.playBeep();
+  
+  //  // color line follow 
+  //  followLineAndTurnWithSquareDetection();
 
-   // After detecting the white square
-   buzzer.playBeep();
-   buzzer.playBeep();
-   buzzer.playBeep();
-     // Play a beep to signal square detection
-   oled.printMessage("White square detected. Stopping.");
-
+  //  // After detecting the white square
+  //  buzzer.playBeep();
+  //  buzzer.playBeep();
+  //  buzzer.playBeep();
+  //    // Play a beep to signal square detection
+  //  oled.printMessage("White square detected. Stopping.");
+    while (true){runForwardWithSensorPID();}
    // Optional: Stop the robot or enter a halt state
    while (true) {
      // Keep the robot stopped or perform other actions as needed

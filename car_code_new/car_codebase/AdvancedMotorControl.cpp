@@ -3,7 +3,7 @@
 #include "SensorControl.h"
 #include <Arduino.h>
 #include "OLED_Display.h"
-
+#include "task2.h"
 // PID control variables for forward motion
 float forwardKp = 4;  // Proportional gain try using 3500/180
 float forwardKi = 0.0;  // Integral gain
@@ -18,6 +18,7 @@ float backwardKd = 0.4;  // Derivative gain
 float backwardLastError = 0;
 float backwardIntegral = 0;
 
+//int pathcolor=0;
 // Function to run forward using PID of the sensor array (without time constraint)
 void runForwardWithSensorPID() {
   Serial.println("Running Forward with Sensor Array PID...");
@@ -28,10 +29,14 @@ void runForwardWithSensorPID() {
 
     // Calculate the position value using a weighted sum
     int position = calculatePosition();
-
+    int error;
+    //pathcolor=0;
     // Compute the error
-    int error = position - 3500;  // Assume line center at 3500
-    Serial.println(error);
+    // if (pathcolor==1){
+    // error = position - 3500;
+    // }
+    // else{error = position;}  // Assume line center at 3500
+    error = position - 3500;
 
     // Compute the PID control values
     forwardIntegral += error;
