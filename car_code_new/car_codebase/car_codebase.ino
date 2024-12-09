@@ -8,7 +8,9 @@
 #include "ColorSensor.h"
 #include "LineFollowAndTurn.h"
 #include "task2.h"
+#include "button.h"
 
+ButtonReader myBtnReader;
 Buzzer buzzer;  // Initialize the Buzzer object
 ColorSensor colorSensor;
 
@@ -21,6 +23,8 @@ BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set thre
 OLEDDisplay oled;
 
 void setup() {
+    
+  myBtnReader.initPins();
   // buzzer.playBeep(); 
   // buzzer.playBeep(); 
   // buzzer.playBeep(); 
@@ -62,3 +66,27 @@ void loop() {
      delay(1000);  // Prevent fast looping in halt state
    }
 }
+// void loop() {
+//     button_t btn = myBtnReader.readButton();
+
+//     switch(btn) {
+//         case BTN_SELECT:
+//             Serial.println("SELECT pressed!");
+//             break;
+//         case BTN_FORWARD:
+//             Serial.println("FORWARD pressed!");
+//             break;
+//         case BTN_BACKWARD:
+//             Serial.println("BACKWARD pressed!");
+//             break;
+//         case BTN_INTERRUPT:
+//             Serial.println("INTERRUPT pressed!");
+//             break;
+//         case BTN_NONE:
+//         default:
+//             // no button pressed, chill out
+//             break;
+//     }
+
+//     delay(10); // small delay to reduce serial spam
+// }
