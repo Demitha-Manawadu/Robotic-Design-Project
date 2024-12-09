@@ -50,18 +50,19 @@ button_t ButtonReader::readButton() {
     // now determine which button is pressed based on stable states
     // If a stable state is LOW, that means button is pressed
     // We'll do priority checking:
-    if (_lastStableState[0] == LOW) {
+    if (_lastStableState[3] == HIGH) {
+    return BTN_INTERRUPT;
+    }
+    else if (_lastStableState[0] == HIGH) {
         return BTN_SELECT;
     }
-    else if (_lastStableState[1] == LOW) {
+    else if (_lastStableState[1] == HIGH) {
         return BTN_FORWARD;
     }
-    else if (_lastStableState[2] == LOW) {
+    else if (_lastStableState[2] == HIGH) {
         return BTN_BACKWARD;
     }
-    else if (_lastStableState[3] == LOW) {
-        return BTN_INTERRUPT;
-    }
+
 
     return BTN_NONE;
 }

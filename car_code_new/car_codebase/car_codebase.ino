@@ -43,50 +43,50 @@ void setup() {
 
 }
 
-void loop() {
-  
-  //colorSensor.detectColor();
-   // Play a beep before starting line-following
-  //  buzzer.playBeep();
-  
-  //  // color line follow 
-  //  followLineAndTurnWithSquareDetection();
-
-  //  // After detecting the white square
-  //  buzzer.playBeep();
-  //  buzzer.playBeep();
-  //  buzzer.playBeep();
-  //    // Play a beep to signal square detection
-  //  oled.printMessage("White square detected. Stopping.");
-   task_2();
-   // Optional: Stop the robot or enter a halt state
-   while (true) {
-     // Keep the robot stopped or perform other actions as needed
-     moveForward(0, 0);  // Ensure motors are stopped
-     delay(1000);  // Prevent fast looping in halt state
-   }
-}
 // void loop() {
-//     button_t btn = myBtnReader.readButton();
+//   moveBackward(180,180);
+//   //colorSensor.detectColor();
+//    // Play a beep before starting line-following
+//   //  buzzer.playBeep();
+  
+//   //  // color line follow 
+//   //  followLineAndTurnWithSquareDetection();
 
-//     switch(btn) {
-//         case BTN_SELECT:
-//             Serial.println("SELECT pressed!");
-//             break;
-//         case BTN_FORWARD:
-//             Serial.println("FORWARD pressed!");
-//             break;
-//         case BTN_BACKWARD:
-//             Serial.println("BACKWARD pressed!");
-//             break;
-//         case BTN_INTERRUPT:
-//             Serial.println("INTERRUPT pressed!");
-//             break;
-//         case BTN_NONE:
-//         default:
-//             // no button pressed, chill out
-//             break;
-//     }
-
-//     delay(10); // small delay to reduce serial spam
+//   //  // After detecting the white square
+//   //  buzzer.playBeep();
+//   //  buzzer.playBeep();
+//   //  buzzer.playBeep();
+//   //    // Play a beep to signal square detection
+//   //  oled.printMessage("White square detected. Stopping.");
+//   //  task_2();
+//   //  // Optional: Stop the robot or enter a halt state
+//   //  while (true) {
+//   //    // Keep the robot stopped or perform other actions as needed
+//   //    moveForward(0, 0);  // Ensure motors are stopped
+//   //    delay(1000);  // Prevent fast looping in halt state
+//   //  }
 // }
+void loop() {
+    button_t btn = myBtnReader.readButton();
+
+    switch(btn) {
+        case BTN_SELECT:
+            Serial.println("SELECT pressed!");
+            break;
+        case BTN_FORWARD:
+            Serial.println("FORWARD pressed!");
+            break;
+        case BTN_BACKWARD:
+            Serial.println("BACKWARD pressed!");
+            break;
+        case BTN_INTERRUPT:
+            Serial.println("INTERRUPT pressed!");
+            break;
+        case BTN_NONE:
+        default:
+            // no button pressed, chill out
+            break;
+    }
+
+    delay(10); // small delay to reduce serial spam
+}
