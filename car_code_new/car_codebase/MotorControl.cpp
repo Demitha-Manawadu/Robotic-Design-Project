@@ -2,8 +2,8 @@
 #include <Arduino.h>
 const int leftMotorForward = 48;
 const int leftMotorBackward = 50;
-const int rightMotorForward = 44;
-const int rightMotorBackward = 46;
+const int rightMotorForward = 46;
+const int rightMotorBackward = 44;
 
 const int enaPin = 8;
 const int enbPin = 9;

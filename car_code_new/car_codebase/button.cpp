@@ -24,49 +24,38 @@ void ButtonReader::initPins() {
 }
 
 button_t ButtonReader::readButton() {
-    // We read all buttons, apply debouncing, return the first pressed we find
-    // If multiple pressed, priority is SELECT > FORWARD > BACKWARD > INTERRUPT
-    // (just like before, or adjust as needed)
-
-    // read raw states
+    // Debounce logic remains the same
     for (int i = 0; i < 4; i++) {
         int reading = digitalRead(_pins[i]);
-
-        // if reading changed from last reading, reset debounce timer
         if (reading != _lastReading[i]) {
             _lastChangeTime[i] = millis();
             _debouncing[i] = true;
             _lastReading[i] = reading;
         }
 
-        // check if enough time has passed since last change
         if (_debouncing[i] && (millis() - _lastChangeTime[i]) > DEBOUNCE_DELAY) {
-            // time to finalize the stable state
             _debouncing[i] = false;
+            // Before we update _lastStableState[i], store its old value for edge detection
+            int oldState = _lastStableState[i];
             _lastStableState[i] = reading;
+
+            // Check for transition from HIGH to LOW (not pressed to pressed)
+            if (oldState == LOW && _lastStableState[i] == HIGH) {
+                // This button just went from not pressed to pressed
+                // Return the corresponding button immediately
+                switch(i) {
+                    case 0: return BTN_SELECT;
+                    case 1: return BTN_FORWARD;
+                    case 2: return BTN_BACKWARD;
+                    case 3: return BTN_INTERRUPT;
+                }
+            }
         }
     }
 
-    // now determine which button is pressed based on stable states
-    // If a stable state is LOW, that means button is pressed
-    // We'll do priority checking:
-    if (_lastStableState[3] == HIGH) {
-    return BTN_INTERRUPT;
-    }
-    else if (_lastStableState[0] == HIGH) {
-        return BTN_SELECT;
-    }
-    else if (_lastStableState[1] == HIGH) {
-        return BTN_FORWARD;
-    }
-    else if (_lastStableState[2] == HIGH) {
-        return BTN_BACKWARD;
-    }
-
-
+    // If no transitions detected, return BTN_NONE
     return BTN_NONE;
 }
-
 button_t ButtonReader::indexToButton(int idx) {
     // just a helper if you need it, currently not used
     switch(idx) {

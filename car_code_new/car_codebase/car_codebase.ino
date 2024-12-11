@@ -9,84 +9,37 @@
 #include "LineFollowAndTurn.h"
 #include "task2.h"
 #include "button.h"
+#include "menu.h"
 
 ButtonReader myBtnReader;
-Buzzer buzzer;  // Initialize the Buzzer object
+Buzzer buzzer;
 ColorSensor colorSensor;
+OLEDDisplay oled; // single OLED object
 
-const int threshold = 500;  // Set your desired threshold for line detection
-const int maxLines = 3;      // Max lines to detect before stopping
-const int targetSpeed = 180; // Desired speed for moving forward
-
-//ColorSensorHandler colorHandler;
-BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set threshold to 500, stop after 3 lines
-OLEDDisplay oled;
+const int threshold = 500;
+const int maxLines = 3;    
+const int targetSpeed = 180;
+BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);
 
 void setup() {
-    
+  Serial.begin(9600);
   myBtnReader.initPins();
-  // buzzer.playBeep(); 
-  // buzzer.playBeep(); 
-  // buzzer.playBeep(); 
-  // buzzer.playBeep(); 
-  // delay(500);
-  oled.init();
-  //oled.displayScrollingName();
+  oled.init();  // initialize OLED
   setupMotors();
   buzzer.playBeep(); 
   setupSensors();
   buzzer.playBeep();    
   setupEncoders();
-  //colorSensor.initialize(); 
-  //barcodeDetector.init();      // Initialize barcode detection (sensors and display)
-  Serial.begin(9600);
 
+  menu_init(); // initialize menu
 }
 
-// void loop() {
-//   moveBackward(180,180);
-//   //colorSensor.detectColor();
-//    // Play a beep before starting line-following
-//   //  buzzer.playBeep();
-  
-//   //  // color line follow 
-//   //  followLineAndTurnWithSquareDetection();
-
-//   //  // After detecting the white square
-//   //  buzzer.playBeep();
-//   //  buzzer.playBeep();
-//   //  buzzer.playBeep();
-//   //    // Play a beep to signal square detection
-//   //  oled.printMessage("White square detected. Stopping.");
-//   //  task_2();
-//   //  // Optional: Stop the robot or enter a halt state
-//   //  while (true) {
-//   //    // Keep the robot stopped or perform other actions as needed
-//   //    moveForward(0, 0);  // Ensure motors are stopped
-//   //    delay(1000);  // Prevent fast looping in halt state
-//   //  }
-// }
 void loop() {
-    button_t btn = myBtnReader.readButton();
-
-    switch(btn) {
-        case BTN_SELECT:
-            Serial.println("SELECT pressed!");
-            break;
-        case BTN_FORWARD:
-            Serial.println("FORWARD pressed!");
-            break;
-        case BTN_BACKWARD:
-            Serial.println("BACKWARD pressed!");
-            break;
-        case BTN_INTERRUPT:
-            Serial.println("INTERRUPT pressed!");
-            break;
-        case BTN_NONE:
-        default:
-            // no button pressed, chill out
-            break;
-    }
-
-    delay(10); // small delay to reduce serial spam
+  button_t btn = myBtnReader.readButton();
+  if (btn != BTN_NONE) {
+    menu_update(btn); // update menu logic
+  }
+  menu_draw(); // draw current menu state
+  delay(10);
 }
+

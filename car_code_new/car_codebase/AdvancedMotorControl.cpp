@@ -37,7 +37,7 @@ void runForwardWithSensorPID() {
     // }
     // else{error = position;}  // Assume line center at 3500
     error = position - 3500;
-
+    //error = position;
     // Compute the PID control values
     forwardIntegral += error;
     float derivative = error - forwardLastError;

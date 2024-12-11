@@ -17,7 +17,14 @@ public:
     void clear();
     void printMessage(String message);
     void printSensorData(int sensorValue);
-    void displayScrollingName();  // New function for scrolling text animation
+    void displayScrollingName();
+
+    // Newly added UI methods for menu
+    void drawTitleBar(const char *title);
+    void drawHighlightedItem(int x, int y, const char *text);
+    void drawNormalItem(int x, int y, const char *text);
+    void drawMenu(const char *title, const char* items[], int numItems, int currentIndex, int itemsPerPage);
+    void drawTaskScreen(const char *taskName, const char *taskMessage);
 
 private:
     Adafruit_SSD1306 display;

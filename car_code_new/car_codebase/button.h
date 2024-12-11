@@ -5,9 +5,9 @@
 #include <stdint.h>
 
 // Define your pins here. Change these to match your wiring.
-#define PIN_SELECT    31
-#define PIN_FORWARD   33
-#define PIN_BACKWARD  35
+#define PIN_SELECT    35
+#define PIN_FORWARD   31
+#define PIN_BACKWARD  33
 #define PIN_INTERRUPT 37
 
 // same button enum as before
