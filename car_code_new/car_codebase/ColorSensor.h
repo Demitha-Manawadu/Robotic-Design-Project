@@ -3,34 +3,25 @@
 
 #include <Arduino.h>
 
-// Pin configuration for the sensors
-struct ColorSensor {
-  int s0, s1, s2, s3, outPin;
-};
-
-class ColorSensorHandler {
+class ColorSensor {
 public:
-  ColorSensorHandler();
-  void setupSensors();
-  void readRGBValues(ColorSensor sensor, int &red, int &green, int &blue);
-  void printAllSensorRGBValues();
-  String detectColor(int red, int green, int blue);
+    // Constructor to initialize threshold values (optional)
+    ColorSensor(int redMin = 20, int redMax = 80, int blueMin = 30, int blueMax = 70);
+
+    // Initialization function to set up pins and settings
+    void initialize();
+
+    // Function to detect color and light up corresponding LED
+    void detectColor();
 
 private:
-  ColorSensor _middle;
-  ColorSensor _left;
-  ColorSensor _right;
+    // Pin definitions
+    const int S0 = 24, S1 = 25, S2 = 26, S3 = 27, OE = 29, OUT = 28;
+    const int redLED = 51, blueLED = 53;
 
-  int readFrequency(ColorSensor sensor);
-  void setFilter(ColorSensor sensor, int s2State, int s3State);
+    // Threshold values for color detection
+    int redMinThreshold, redMaxThreshold;
+    int blueMinThreshold, blueMaxThreshold;
 };
-
-// Basic color thresholds (adjust these based on your calibration)
-const int RED_MIN = 30;
-const int RED_MAX = 100;
-const int BLUE_MIN = 200;
-const int BLUE_MAX = 300;
-const int GREEN_MIN = 100;
-const int GREEN_MAX = 250;
 
 #endif

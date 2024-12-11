@@ -1,52 +1,33 @@
-// OLED_Display.h
 #ifndef OLED_DISPLAY_H
 #define OLED_DISPLAY_H
 
-#include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Wire.h>
 
-// Define OLED display size
+// Define OLED display dimensions
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-#define OLED_RESET    -1 // Reset pin (or -1 if sharing Arduino reset pin)
+#define OLED_RESET -1
 
 class OLEDDisplay {
-  private:
-    Adafruit_SSD1306 display;
-
-  public:
+public:
     OLEDDisplay();
     void init();
     void clear();
     void printMessage(String message);
     void printSensorData(int sensorValue);
-};
+    void displayScrollingName();
 
-#endif
-// OLED_Display.h
-#ifndef OLED_DISPLAY_H
-#define OLED_DISPLAY_H
+    // Newly added UI methods for menu
+    void drawTitleBar(const char *title);
+    void drawHighlightedItem(int x, int y, const char *text);
+    void drawNormalItem(int x, int y, const char *text);
+    void drawMenu(const char *title, const char* items[], int numItems, int currentIndex, int itemsPerPage);
+    void drawTaskScreen(const char *taskName, const char *taskMessage);
 
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
-// Define OLED display size
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-#define OLED_RESET    -1 // Reset pin (or -1 if sharing Arduino reset pin)
-
-class OLEDDisplay {
-  private:
+private:
     Adafruit_SSD1306 display;
-
-  public:
-    OLEDDisplay();
-    void init();
-    void clear();
-    void printMessage(String message);
-    void printSensorData(int sensorValue);
 };
 
 #endif

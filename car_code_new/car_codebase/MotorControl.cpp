@@ -2,8 +2,8 @@
 #include <Arduino.h>
 const int leftMotorForward = 48;
 const int leftMotorBackward = 50;
-const int rightMotorForward = 44;
-const int rightMotorBackward = 46;
+const int rightMotorForward = 46;
+const int rightMotorBackward = 44;
 
 const int enaPin = 8;
 const int enbPin = 9;
@@ -19,7 +19,7 @@ volatile long leftEncoderCount = 0;
 volatile long rightEncoderCount = 0;
 
 // Constants to map degrees to encoder counts
-const float ENCODER_COUNTS_PER_DEGREE = 11.89;  // Adjust this value based on your setup
+const float ENCODER_COUNTS_PER_DEGREE = 11.99;  // Adjust this value based on your setup
 
 // PID control variables for turning
 float turnKp = 1.0;  // Proportional gain for turning
@@ -97,8 +97,8 @@ void turnByAngleWithPID(int angle) {
     int rightSpeed = baseSpeed - output;
 
     // Ensure motor speeds are within valid range
-    leftSpeed = constrain(leftSpeed, 0, 255);
-    rightSpeed = constrain(rightSpeed, 0, 255);
+    leftSpeed = constrain(leftSpeed, 70, 130);
+    rightSpeed = constrain(rightSpeed, 70, 130);
 
     if (angle > 0) {
       // Turn right: left motor moves forward, right motor moves backward

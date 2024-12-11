@@ -3,35 +3,40 @@
 #include "SensorControl.h"
 #include <Arduino.h>
 #include "OLED_Display.h"
-
+#include "task2.h"
 // PID control variables for forward motion
-float forwardKp = 1.0;  // Proportional gain try using 3500/180
+float forwardKp = .95;  // Proportional gain try using 3500/180
 float forwardKi = 0.0;  // Integral gain
-float forwardKd = 0.7;  // Derivative gain
+float forwardKd = .55;    // Derivative gain
 float forwardLastError = 0;
 float forwardIntegral = 0;
 
 // PID control variables for backward motion
-float backwardKp = 1.2;  // Proportional gain
+float backwardKp = .5;  // Proportional gain
 float backwardKi = 0.00;  // Integral gain
-float backwardKd = 0.6;  // Derivative gain
+float backwardKd = 0.4;  // Derivative gain
 float backwardLastError = 0;
 float backwardIntegral = 0;
 
+//int pathcolor=0;
 // Function to run forward using PID of the sensor array (without time constraint)
 void runForwardWithSensorPID() {
   Serial.println("Running Forward with Sensor Array PID...");
 
-  while (true) {  // Infinite loop to keep running until some external condition breaks the loop
+   // Infinite loop to keep running until some external condition breaks the loop
     // Read and normalize sensor values
     readSensors();
 
     // Calculate the position value using a weighted sum
     int position = calculatePosition();
-
+    int error;
+    //pathcolor=0;
     // Compute the error
-    int error = position - 3500;  // Assume line center at 3500
-    Serial.println(error);
+    // if (pathcolor==1){
+    // error = position - 3500;
+    // }
+    // else{error = position;}  // Assume line center at 3500
+    error = position;
 
     // Compute the PID control values
     forwardIntegral += error;
@@ -40,9 +45,9 @@ void runForwardWithSensorPID() {
     forwardLastError = error;
 
     // Adjust the motor speeds based on the PID output
-    int baseSpeed = 180;
-    int leftSpeed = baseSpeed + output;
-    int rightSpeed = baseSpeed - output;
+    int baseSpeed = 170;
+    int leftSpeed = baseSpeed - output;
+    int rightSpeed = baseSpeed + output;
 
     // Ensure motor speeds are within a valid range
     leftSpeed = constrain(leftSpeed, 0, 255);
@@ -50,13 +55,9 @@ void runForwardWithSensorPID() {
 
     // Move the car forward with the calculated speeds
     moveForward(leftSpeed, rightSpeed);
-
+    delay(20);
     // You can add a break condition here if needed
     // Example: if (someConditionMet) { break; }
-  }
-
-  // Stop the motors after forward motion
-  moveForward(0, 0);
 }
 
 // Function to run backward using PID of the encoders (without time constraint)

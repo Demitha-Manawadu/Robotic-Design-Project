@@ -1,6 +1,6 @@
 #ifndef ADVANCEDMOTORCONTROL_H
 #define ADVANCEDMOTORCONTROL_H
-
+#include "task2.h"
 
 extern volatile long leftEncoderCount;
 extern volatile long rightEncoderCount;

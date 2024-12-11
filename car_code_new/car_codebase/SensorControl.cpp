@@ -6,6 +6,7 @@ const int sensorPins[NUM_SENSORS] = {A7, A6, A5, A4, A3, A2, A1, A0};
 int sensorValues[NUM_SENSORS];
 int calibratedMin[NUM_SENSORS];
 int calibratedMax[NUM_SENSORS];
+const int weight[NUM_SENSORS] = {-100,-50,-20,-10,10,20,50,100};
 
 void setupSensors() {
   for (int i = 0; i < NUM_SENSORS; i++) {
@@ -15,7 +16,15 @@ void setupSensors() {
   calibrateSensors();
 }
 
+#include "OLED_Display.h"
+
+// Assuming `oled` is an instance of `OLEDDisplay` created in the main code
+extern OLEDDisplay oled;
+
 void calibrateSensors() {
+  // Display "Calibrating..." message
+  oled.printMessage("Calibrating...");
+
   for (int j = 0; j < 200; j++) {
     for (int i = 0; i < NUM_SENSORS; i++) {
       int sensorValue = analogRead(sensorPins[i]);
@@ -28,13 +37,21 @@ void calibrateSensors() {
     }
     delay(20);
   }
+
+  // Clear the display or show a completion message once calibration is done
+  oled.clear();
+  oled.printMessage("Calibration Complete");
+  delay(1000);  // Optional delay to show the completion message for 1 second
+  oled.clear();  // Clear the display after showing the message
 }
+
 
 void readSensors() {
   for (int i = 0; i < NUM_SENSORS; i++) {
     int sensorValue = analogRead(sensorPins[i]);
     int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;
-    sensorValues[i] = (sensorValue > threshold) ? 0 : 1;
+    //int threshold = 200;
+    sensorValues[i] = (sensorValue < threshold) ? 1 : 0;
   }
 }
 
@@ -43,9 +60,9 @@ int calculatePosition() {
   long int sum = 0;
 
   for (int i = 0; i < NUM_SENSORS; i++) {
-    weightedSum += (long int)sensorValues[i] * (i * 1000);
-    sum += sensorValues[i];
+    
+    weightedSum += (long int)sensorValues[i] *weight[i];
   }
 
-  return sum > 0 ? weightedSum / sum : 3500;
+  return  weightedSum;
 }

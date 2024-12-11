@@ -6,43 +6,40 @@
 #include "BarcodeDetection.h"
 #include "Buzzer.h"
 #include "ColorSensor.h"
+#include "LineFollowAndTurn.h"
+#include "task2.h"
+#include "button.h"
+#include "menu.h"
 
+ButtonReader myBtnReader;
+Buzzer buzzer;
+ColorSensor colorSensor;
+OLEDDisplay oled; // single OLED object
 
-Buzzer buzzer;  // Initialize the Buzzer object
-
-
-const int threshold = 500;  // Set your desired threshold for line detection
-const int maxLines = 3;      // Max lines to detect before stopping
-const int targetSpeed = 180; // Desired speed for moving forward
-
-
-ColorSensorHandler colorHandler;
-BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);  // Set threshold to 500, stop after 3 lines
-OLEDDisplay oled;
+const int threshold = 500;
+const int maxLines = 3;    
+const int targetSpeed = 180;
+BarcodeDetection barcodeDetector(threshold, maxLines, targetSpeed);
 
 void setup() {
-  oled.init();
-  oled.printMessage("<<<< WE ARE VIRO VENTURES >>>>");
-  setupMotors();
-  setupSensors();
-  setupEncoders();
-  barcodeDetector.init();      // Initialize barcode detection (sensors and display)
   Serial.begin(9600);
+  myBtnReader.initPins();
+  oled.init();  // initialize OLED
+  setupMotors();
+  buzzer.playBeep(); 
+  setupSensors();
+  buzzer.playBeep();    
+  setupEncoders();
+
+  menu_init(); // initialize menu
 }
 
 void loop() {
-   // handleBlackDetectionAndDisplay();
-    colorHandler.printAllSensorRGBValues();
-  delay(4000);
-   }
-  //runForwardWithSensorPID();
-  // Example: running the task for box position 0
+  button_t btn = myBtnReader.readButton();
+  if (btn != BTN_NONE) {
+    menu_update(btn); // update menu logic
+  }
+  menu_draw(); // draw current menu state
+  delay(10);
+}
 
-
-//  barcodeDetector.update();     // Run the entire detection process
-//     if (barcodeDetector.isCompleted()) {
-//         // Optionally, do something when detection is complete
-//         oled.printMessage("Barcode detection completed.");
-//         while (true); // Stop the loop or perform other actions
-
-//     }}
