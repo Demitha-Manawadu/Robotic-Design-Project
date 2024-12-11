@@ -11,7 +11,7 @@ int pathcolor=1;
 // Junction type: 1 = 4-way, 2 = T-junction, 3 = L-junction
 int confirmAndClassifyJunction() {
   int junctionType = 0;
-  const int targetCount = 500; // Example encoder count for confirmation
+  const int targetCount = 300; // Example encoder count for confirmation
 
   // Reset encoders before moving forward
   leftEncoderCount = 0;
@@ -110,7 +110,7 @@ void task_2() {
             }
             angleInput = confirmAndClassifyJunction();  // Determine junction type
         }
-                if (angleInput == 3) {  // L-junction detected
+          if (angleInput == 3) {  // L-junction detected
             moveForward(0, 0);  // Stop the robot momentarily
             delay(200);
 
@@ -129,6 +129,7 @@ void task_2() {
 
     }
     moveForward(0, 0);
+    delay(1000);
     turnByAngleWithPID(-90);
 
     // check for the gate 

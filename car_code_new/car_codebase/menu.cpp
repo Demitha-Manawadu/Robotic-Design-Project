@@ -81,6 +81,7 @@ void menu_update(button_t btn) {
                 break;
             case BTN_INTERRUPT:
                 // Reset to top of menu
+                moveForward(0, 0);
                 currentIndex = 0;
                 break;
             case BTN_NONE:
@@ -102,6 +103,7 @@ void menu_update(button_t btn) {
 
 void menu_draw() {
     if (currentState == MENU_STATE_MAIN) {
+        moveForward(0, 0);
         oled.drawMenu("MENU", menuItems, numItems, currentIndex, ITEMS_PER_PAGE);
     } else if (currentState == MENU_STATE_TASK) {
 
@@ -114,6 +116,15 @@ void menu_draw() {
         }
         if (taskIndex ==2){
           runBackwardWithEncoderPID();
+        }
+        if (taskIndex ==3){
+          turnByAngleWithPID(90);
+          currentState = MENU_STATE_MAIN;
+
+        }
+        if (taskIndex ==4){
+        task_2();
+        currentState = MENU_STATE_MAIN;
         }
 
          else {

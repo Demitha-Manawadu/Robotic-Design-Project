@@ -5,9 +5,9 @@
 #include "OLED_Display.h"
 #include "task2.h"
 // PID control variables for forward motion
-float forwardKp = 4;  // Proportional gain try using 3500/180
+float forwardKp = .95;  // Proportional gain try using 3500/180
 float forwardKi = 0.0;  // Integral gain
-float forwardKd = 2;    // Derivative gain
+float forwardKd = .55;    // Derivative gain
 float forwardLastError = 0;
 float forwardIntegral = 0;
 
@@ -36,8 +36,8 @@ void runForwardWithSensorPID() {
     // error = position - 3500;
     // }
     // else{error = position;}  // Assume line center at 3500
-    error = position - 3500;
-    //error = position;
+    error = position;
+
     // Compute the PID control values
     forwardIntegral += error;
     float derivative = error - forwardLastError;
@@ -45,9 +45,9 @@ void runForwardWithSensorPID() {
     forwardLastError = error;
 
     // Adjust the motor speeds based on the PID output
-    int baseSpeed = 120;
-    int leftSpeed = baseSpeed + output;
-    int rightSpeed = baseSpeed - output;
+    int baseSpeed = 170;
+    int leftSpeed = baseSpeed - output;
+    int rightSpeed = baseSpeed + output;
 
     // Ensure motor speeds are within a valid range
     leftSpeed = constrain(leftSpeed, 0, 255);

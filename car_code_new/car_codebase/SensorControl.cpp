@@ -6,6 +6,7 @@ const int sensorPins[NUM_SENSORS] = {A7, A6, A5, A4, A3, A2, A1, A0};
 int sensorValues[NUM_SENSORS];
 int calibratedMin[NUM_SENSORS];
 int calibratedMax[NUM_SENSORS];
+const int weight[NUM_SENSORS] = {-100,-50,-20,-10,10,20,50,100};
 
 void setupSensors() {
   for (int i = 0; i < NUM_SENSORS; i++) {
@@ -49,7 +50,8 @@ void readSensors() {
   for (int i = 0; i < NUM_SENSORS; i++) {
     int sensorValue = analogRead(sensorPins[i]);
     int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;
-    sensorValues[i] = (sensorValue > threshold) ? 0 : 1;
+    //int threshold = 200;
+    sensorValues[i] = (sensorValue < threshold) ? 1 : 0;
   }
 }
 
@@ -58,9 +60,9 @@ int calculatePosition() {
   long int sum = 0;
 
   for (int i = 0; i < NUM_SENSORS; i++) {
-    weightedSum += (long int)sensorValues[i] * (i * 1000);
-    sum += sensorValues[i];
+    
+    weightedSum += (long int)sensorValues[i] *weight[i];
   }
 
-  return sum > 0 ? weightedSum / sum : 3500;
+  return  weightedSum;
 }
