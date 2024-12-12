@@ -5,8 +5,10 @@
 #include "MotorControl.h"
 #include "task2.h"
 #include "ColorSensor.h"
+#include "Buzzer.h"
 
-int no5=1; // Placeholder for any additional input
+Buzzer buzzer2;
+int no5=0; // Placeholder for any additional input
 int pathcolor=1;
 // Junction type: 1 = 4-way, 2 = T-junction, 3 = L-junction
 int confirmAndClassifyJunction() {
@@ -37,19 +39,16 @@ int confirmAndClassifyJunction() {
 
   if (junctionType == 1) {
     // Confirm 4-way or T-junction based on center sensor values
-    if (sensorValues[3] == 1 && sensorValues[4] == 1) {
-        digitalWrite(53, HIGH);        
+    if (sensorValues[3] == 1 && sensorValues[4] == 1) {      
       return 1;  // 4-way junction
     } 
     else {
-      digitalWrite(51, HIGH);
       return 2;  // T-junction
       
     }
   } else {
     // Check for L-junction or no junction
     if (sensorValues[3] == 1 && sensorValues[4] == 1) {
-      digitalWrite(51, HIGH);
       return 2;  // T-junction
     } else {
       return 3;  // L-junction
@@ -57,10 +56,12 @@ int confirmAndClassifyJunction() {
   }
 }
 void task_2() {
- int angleInput = 0;    
+    corrector();
+    corrector();
+    int angleInput = 0;
 
-    while (true) {  // Infinite loop until explicitly exited
-        angleInput = 0;  
+    while (true) {  // First while loop
+        angleInput = 0;
         bool left = false;
         runForwardWithSensorPID();  // Follow the line
         readSensors();  // Update sensor readings
@@ -95,45 +96,114 @@ void task_2() {
             corrector();  // Stabilize after the turn
         }
     }
-    moveForward(0, 0);  // Stop the robot when exiting the loop
-    if (no5!=0){
-      while(angleInput != 1 ){
-        int angleInput = 0;  
-        bool left = false;
-        runForwardWithSensorPID();  // Follow the line
-        readSensors();  // Update sensor readings
-        if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
-            if (sensorValues[0] == 1 && sensorValues[1] == 1) {
-                left = true;  // Left turn detected
-            } else {
-                left = false;  // Right turn detected
-            }
-            angleInput = confirmAndClassifyJunction();  // Determine junction type
-        }
-          if (angleInput == 3) {  // L-junction detected
-            moveForward(0, 0);  // Stop the robot momentarily
-            delay(200);
+    moveForward(0, 0);  // Stop the robot when exiting the first loop
 
-            if (left) {
-                turnByAngleWithPID(-90); 
-                corrector();  // Turn left
-            } else {
-                turnByAngleWithPID(90);  // Turn right
-                corrector(); 
-            }
-            delay(100);
-            angleInput = 0;  // Reset for further detection
-            corrector();  // Stabilize after the turn
+//when the value is 1
 
+    if (no5==0){
+      digitalWrite(49,HIGH);
+      buzzer2.playBeep();
+      while (true) {  // Second while loop, similar logic to the first one
+            angleInput = 0;
+            bool left = false;
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
+
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+                if (sensorValues[0] == 1 && sensorValues[1] == 1) {
+                    left = true;  // Left turn detected
+                } else {
+                    left = false;  // Right turn detected
+                }
+                angleInput = confirmAndClassifyJunction();  // Determine junction type
+            }
+
+            // Handle detected junctions
+            if (angleInput == 3) {  // 4-way junction detected
+                moveForward(0, 0);  // Stop the robot
+                break;  // Exit the loop
+            }
         }
+        digitalWrite(49,LOW);
+        moveForward(0, 0);
+        delay(500);
+        runBackwardWithoutPID(500);
+        moveForward(0, 0);
+        delay(500);
+        // corrector();
+        // moveForward(0, 0);
+        // delay(500);
+        // runBackwardWithoutPID(1000);
+        // delay(200);
+        // corrector();
+        // delay(200);
+        buzzer2.playBeep();
+        while (true) {  // Second while loop, similar logic to the first one
+            angleInput = 0;
+            bool left = false;
+            runBackwardWithEncoderPID();  // Follow the line
+            readSensors();  // Update sensor readings
+
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+            moveForward(0, 0); 
+
+            turnByAngleWithPID(90);
+            moveForward(0, 0); 
+            break;
+            }
+        }
+        delay(100);
+
+
+
 
     }
-    moveForward(0, 0);
-    delay(1000);
-    turnByAngleWithPID(-90);
 
-    // check for the gate 
+    if (no5 != 0) {
+        while (true) {  // Second while loop, similar logic to the first one
+            angleInput = 0;
+            bool left = false;
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
 
-}
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+                if (sensorValues[0] == 1 && sensorValues[1] == 1) {
+                    left = true;  // Left turn detected
+                } else {
+                    left = false;  // Right turn detected
+                }
+                angleInput = confirmAndClassifyJunction();  // Determine junction type
+            }
 
+            // Handle detected junctions
+            if (angleInput == 1) {  // 4-way junction detected
+                moveForward(0, 0);  // Stop the robot
+                break;  // Exit the loop
+            }
+
+            if (angleInput == 3) {  // L-junction detected
+                moveForward(0, 0);  // Stop the robot momentarily
+                delay(200);
+
+                if (left) {
+                    turnByAngleWithPID(-90);  // Turn left
+                    corrector();
+                } else {
+                    turnByAngleWithPID(90);  // Turn right
+                    corrector();
+                }
+                delay(100);
+                angleInput = 0;  // Reset for further detection
+                corrector();  // Stabilize after the turn
+            }
+        }
+        moveForward(0, 0);
+        delay(1000);
+        turnByAngleWithPID(-90);
+
+        // Check for the gate (not implemented here)
+    }
 }

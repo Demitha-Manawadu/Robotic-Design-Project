@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 #define NUM_SENSORS 8
+
 const int sensorPins[NUM_SENSORS] = {A7, A6, A5, A4, A3, A2, A1, A0};
 int sensorValues[NUM_SENSORS];
 int calibratedMin[NUM_SENSORS];

@@ -68,7 +68,7 @@ void runBackwardWithEncoderPID() {
 
   Serial.println("Running Backward with Encoder PID...");
 
-  while (true) {  // Infinite loop to keep running until some external condition breaks the loop
+    // Infinite loop to keep running until some external condition breaks the loop
     // Calculate the error using encoder counts
     long error = leftEncoderCount - rightEncoderCount;
 
@@ -92,10 +92,6 @@ void runBackwardWithEncoderPID() {
 
     // You can add a break condition here if needed
     // Example: if (someConditionMet) { break; }
-  }
-
-  // Stop the motors after backward motion
-  moveBackward(0, 0);
 }
 
 void runForwardWithEncoderPID(int targetSpeed) {

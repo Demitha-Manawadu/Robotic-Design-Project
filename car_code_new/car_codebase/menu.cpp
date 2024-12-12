@@ -126,7 +126,9 @@ void menu_draw() {
         task_2();
         currentState = MENU_STATE_MAIN;
         }
-
+        if (taskIndex ==5){
+          runBackwardWithEncoderPID();
+        }
          else {
             oled.drawTaskScreen("Unknown Task", "No Data");
         }
