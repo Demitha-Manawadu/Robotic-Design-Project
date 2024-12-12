@@ -6,8 +6,11 @@
 #include "task2.h"
 #include "ColorSensor.h"
 #include "Buzzer.h"
+#include "MotorControl.h"
 
+bool wall_at_1st=false;
 Buzzer buzzer2;
+int cot;
 int no5=0; // Placeholder for any additional input
 int pathcolor=1;
 // Junction type: 1 = 4-way, 2 = T-junction, 3 = L-junction
@@ -55,6 +58,48 @@ int confirmAndClassifyJunction() {
     }
   }
 }
+
+void backTillJ(){
+  leftEncoderCount = 0;
+  rightEncoderCount = 0;
+  while (true){
+        readSensors();  // Update sensor readings
+        runBackwardWithEncoderPID();        
+        if ((sensorValues[0] == 1 && sensorValues[1] == 1) && (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+          break;
+        }
+        }
+}
+void last_check(){
+        delay(500);
+        runBackwardWithoutPID(500);
+        moveForward(0, 0);
+        delay(500);
+        corrector();
+        runBackwardWithoutPID(500);
+        moveForward(0, 0);
+        delay(500);
+        corrector();
+        backTillJ();
+        digitalWrite(49,HIGH);
+        buzzer2.playBeep();
+        cot=1;
+        while (true) {  // Second while loop, similar logic to the first one
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
+
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) && (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+              runForwardWithoutPID(500);
+              if (cot){cot=0;}
+              else{break;}
+            }
+        }
+        digitalWrite(49,LOW);
+        buzzer2.playBeep();
+}
+
+
 void task_2() {
     corrector();
     corrector();
@@ -98,7 +143,8 @@ void task_2() {
     }
     moveForward(0, 0);  // Stop the robot when exiting the first loop
 
-//when the value is 1
+
+
 
     if (no5==0){
       digitalWrite(49,HIGH);
@@ -138,7 +184,8 @@ void task_2() {
         // delay(200);
         // corrector();
         // delay(200);
-        buzzer2.playBeep();
+        leftEncoderCount = 0;
+        rightEncoderCount = 0;
         while (true) {  // Second while loop, similar logic to the first one
             angleInput = 0;
             bool left = false;
@@ -148,7 +195,7 @@ void task_2() {
             // Check for corner detection
             if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
             moveForward(0, 0); 
-
+            delay(500);
             turnByAngleWithPID(90);
             moveForward(0, 0); 
             break;
@@ -156,8 +203,97 @@ void task_2() {
         }
         delay(100);
 
+        while (true) {  // Second while loop, similar logic to the first one
+            angleInput = 0;
+            bool left = false;
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
 
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+                angleInput = confirmAndClassifyJunction();  // Determine junction type
+            }
 
+            // Handle detected junctions
+            if (angleInput == 3) {  // 4-way junction detected
+                moveForward(0, 0);  // Stop the robot
+                break;  // Exit the loop
+            }
+            else if (angleInput == 1) {  // 4-way junction detected
+            moveForward(0, 0);  // Stop the robot
+            
+
+            //check for wallllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+            
+            turnByAngleWithPID(-90); 
+            corrector();
+            angleInput = 0;
+            }
+            else if (angleInput == 2){                   
+              turnByAngleWithPID(-90);  // Turn right
+              corrector();
+              angleInput = 0;}
+        }
+        buzzer2.playBeep();
+        digitalWrite(49,HIGH);
+        backTillJ();
+        if (wall_at_1st){
+        runBackwardWithoutPID(500);
+        moveForward(0, 0);
+        delay(800);
+        corrector();
+        backTillJ();
+        }
+        delay(500);
+        buzzer2.playBeep();
+        digitalWrite(49,LOW);
+        leftEncoderCount = 0;
+        rightEncoderCount = 0;
+        leftEncoderCount = 0;
+        rightEncoderCount = 0;
+        while (true){
+        readSensors();  // Update sensor readings
+        runBackwardWithEncoderPID();        
+        if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+          break;
+        }
+        }
+        delay(500);
+        turnByAngleWithPID(-90);  // Turn right
+        corrector();
+        while (true) {  // Second while loop, similar logic to the first one
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) || (sensorValues[6] == 1 && sensorValues[7] == 1)) {                
+              angleInput = confirmAndClassifyJunction();  // Determine junction type
+            }
+            if (angleInput == 1) {  // 4-way junction detected
+                moveForward(0, 0);  // Stop the robot
+                break;  // Exit the loop
+            }
+            else if (angleInput == 2 || angleInput == 3){                   
+              turnByAngleWithPID(90);  // Turn right
+              corrector();
+              angleInput = 0;}
+
+            
+        }
+        buzzer2.playBeep();
+        digitalWrite(49,HIGH);
+        cot=1;
+        while (true) {  // Second while loop, similar logic to the first one
+            runForwardWithSensorPID();  // Follow the line
+            readSensors();  // Update sensor readings
+
+            // Check for corner detection
+            if ((sensorValues[0] == 1 && sensorValues[1] == 1) && (sensorValues[6] == 1 && sensorValues[7] == 1)) {
+              runForwardWithoutPID(500);
+              if (cot){cot=0;}
+              else{break;}
+            }
+        }
+        digitalWrite(49,LOW);
+        buzzer2.playBeep();
 
     }
 
