@@ -360,7 +360,7 @@ void task6() {
           delay(500);
 
           turnByAngleWithPID(180);
-          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
           runForwardWithoutPID_1(length);
       }
     int boxHeight3 = detectBoxHeight();
