@@ -120,6 +120,7 @@ void boxdone(){
   digitalWrite(49,HIGH);
   goBackwardUntilJunction();
   goBackwardUntilJunction();
+  turnByAngleWithPID(180); 
 }
 void task_2(int no5){
   corrector();
@@ -220,11 +221,54 @@ void task_2(int no5){
         boxdone();
 
       }
-    // if (gate){
-    //   if
-    // }
-    
+    }
+    if (gate){
+      if(no5==1){
+        turnByAngleWithPID(90);goForwardAndHandleJunction('R');
+        goForwardAndHandleJunction('R');goForwardAndHandleJunction('S');
+        digitalWrite(49,HIGH);
+        buzzer2.playBeep();
+        goBackwardUntilJunction();
+        goBackwardUntilJunction();
+        boxdone();
 
+      }
+
+      else if(no5==2){
+        turnByAngleWithPID(90);goForwardAndHandleJunction('S');goForwardAndHandleJunction('R');
+        goForwardAndHandleJunction('R');goForwardAndHandleJunction('S');
+        digitalWrite(49,HIGH);
+        buzzer2.playBeep();
+        goBackwardUntilJunction();
+        boxdone();
+
+      }
+      else if (no5==3){
+        turnByAngleWithPID(90);goForwardAndHandleJunction('S');goForwardAndHandleJunction('R');
+        goForwardAndHandleJunction('S');
+        digitalWrite(49,HIGH);
+        buzzer2.playBeep();
+        goBackwardUntilJunction();goBackwardUntilJunction();
+        digitalWrite(49,LOW);
+        buzzer2.playBeep();
+      }
+      else  if (no5==2){
+        turnByAngleWithPID(90); 
+        goForwardAndHandleJunction('S');goForwardAndHandleJunction('R');goForwardAndHandleJunction('L');goForwardAndHandleJunction('S');
+        digitalWrite(49,HIGH);
+        buzzer2.playBeep();
+        goBackwardUntilJunction();
+        digitalWrite(49,LOW);
+        buzzer2.playBeep();
+        goBackwardUntilJunction();
+        turnByAngleWithPID(-90); 
+        goForwardAndHandleJunction('R');
+        goForwardAndHandleJunction('R');
+        goForwardAndHandleJunction('S');
+        goBackwardUntilJunction();
+        goBackwardUntilJunction();
+        turnByAngleWithPID(180);
+      }
   }
 }
 }
