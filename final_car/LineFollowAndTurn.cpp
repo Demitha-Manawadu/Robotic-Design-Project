@@ -12,13 +12,13 @@ void followLineAndTurnWithSquareDetection() {
 
   // Loop for line-following with PID, handling junctions, corners, and square detection
   while (!cornerDetected && !squareDetected) {
-    runForwardWithSensorPID();  // Follow the line
+    runForwardWithSensorPIDr();  // Follow the line
 
     readSensors();  // Update sensor values
 
     // Check if all sensors detect black (indicating a black square)
     bool allSensorsDetectBlack = true;
-    for (int i = 1; i < NUM_SENSORS; i++) {
+    for (int i = 2; i < NUM_SENSORS-2; i++) {
       if (sensorValues[i] != 1) {  // If any sensor does not detect black, break
         allSensorsDetectBlack = false;
         break;
@@ -31,7 +31,7 @@ void followLineAndTurnWithSquareDetection() {
       while (millis() - squareDetectionStart < 200) {  // Confirmation period
         readSensors();
         allSensorsDetectBlack = true;
-        for (int i = 0; i < NUM_SENSORS; i++) {
+        for (int i = 2; i < NUM_SENSORS-2; i++) {
           if (sensorValues[i] != 0) {  // Any sensor not detecting black cancels the detection
             allSensorsDetectBlack = false;
             break;
@@ -52,8 +52,8 @@ void followLineAndTurnWithSquareDetection() {
 
     // Existing corner and 4-way junction logic here
     // Check for a 4-way junction: both left and right detect the line briefly
-    if (sensorValues[0] == 1 && sensorValues[1] == 1 && 
-        sensorValues[NUM_SENSORS - 1] == 1 && sensorValues[NUM_SENSORS - 2] == 1) {
+    if (sensorValues[3] == 1 && sensorValues[4] == 1 && sensorValues[5] == 1 &&
+        sensorValues[NUM_SENSORS - 3] == 1 && sensorValues[NUM_SENSORS - 4] == 1) {
       // Detected a 4-way junction, continue forward without turning
       runForwardWithoutPID(250);
       delay(200);  // Brief delay to pass the junction
@@ -98,7 +98,7 @@ void followLineAndTurnWithSquareDetection() {
       while ((millis() - rightDetectionTime) < 150) {  // 150 ms confirmation window
         moveForward(180, 180);
         readSensors();
-        if ((sensorValues[2] == 1 && sensorValues[3] == 1 && sensorValues[8] == 1 && sensorValues[9] == 1)) {
+        if ((sensorValues[2] == 1 && sensorValues[3] == 1 && sensorValues[7] == 1 && sensorValues[8] == 1 && sensorValues[5] == 1)) {
           rightCornerConfirmed = false;
           moveForward(0, 0);
           break;  // Exit if the corner is not persistent

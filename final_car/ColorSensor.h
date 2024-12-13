@@ -5,6 +5,7 @@
 
 class ColorSensor {
 public:
+    bool bluee;
     // Constructor to initialize threshold values (optional)
     ColorSensor(int redMin = 20, int redMax = 80, int blueMin = 30, int blueMax = 70);
 
@@ -16,7 +17,7 @@ public:
 
 private:
     // Pin definitions
-    const int S0 = 24, S1 = 25, S2 = 26, S3 = 27, OE = 29, OUT = 28;
+    const int S0 = 24, S1 = 25, S2 = 26, S3 = 27, OUT = 28;
     const int redLED = 51, blueLED = 53;
 
     // Threshold values for color detection

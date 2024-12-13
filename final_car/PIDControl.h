@@ -6,6 +6,8 @@
 // PID parameters
 extern int sensorValues[12];
 // Function prototypes
+void runForwardWithSensorPIDw();
+void runForwardWithSensorPIDr();
 void runForwardWithSensorPID();
 void runBackwardWithEncoderPID();
 #endif

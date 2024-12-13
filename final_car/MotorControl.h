@@ -18,6 +18,7 @@ void resetEncoders();
 // Encoder functions
 void runBackwardWithoutPID(long targetCount);
 void runForwardWithoutPID(long targetCount);
+void runForwardWithoutPID_1(long targetCount);
 void leftEncoderISR();
 void rightEncoderISR();
 void readEncoders();
