@@ -145,3 +145,13 @@ void OLEDDisplay::printEncoderCounts(int leftEncoderCount, int rightEncoderCount
   // Update the OLED display
   display.display();
 }
+void OLEDDisplay::displayArray(int k[],int len) {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("Array: ");
+  for (int i = 0; i < len; i++) {
+    display.print(k[i]);
+    display.print(" ");
+  }
+  display.display();
+}

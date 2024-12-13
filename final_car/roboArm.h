@@ -1,7 +1,8 @@
 #ifndef ROBOARM_H
 #define ROBOARM_H
-void task_6();
-
+void task6();
+void setupServo();
+void lowerGripper();
 extern bool bluee;
 extern int whiteline;
 // extern volatile long leftEncoderCount = 0;

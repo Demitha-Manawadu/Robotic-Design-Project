@@ -9,13 +9,14 @@
 #include "button.h"
 #include "menu.h"
 #include "OLED_Display.h"
-
+#include "roboArm.h"
 ButtonReader myBtnReader;
 Buzzer buzzer;
 //ColorSensor colorSensor;
 OLEDDisplay oled; // single OLED object
 
 void setup() {
+  setupServo();
   Serial.begin(9600);
   myBtnReader.initPins();
   oled.init(); 

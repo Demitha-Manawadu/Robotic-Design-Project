@@ -5,13 +5,15 @@
 #include "task2.h"
 #include "MotorControl.h"
 #include "roboArm.h"
-int length=3200;
+int length=1400;
 // Create servo objects for two servos
 Servo myServo;       // Servo for grabbing/dropping the box
 Servo liftServo;     // Servo for lifting/lowering the gripper
 
-const int sensorPin = A0; // Analog pin connected to Sharp IR sensor output
-
+const int sensorPin = A15; // Analog pin connected to Sharp IR sensor output
+int boxHeight;
+int boxHeight2;
+int boxHeight3;
 // Function to read the analog value from the Sharp IR sensor
 int readSharpAnalog() {
   return analogRead(sensorPin); // Return the analog reading
@@ -35,27 +37,26 @@ void smoothMove(Servo &servo, int startAngle, int endAngle, int delayTime) {
 // Function to grab the box (servo on pin 6)
 void grabBox() {
   smoothMove(myServo, 180, 0, 15); // Smoothly move from 180 to 0 degrees
-  delay(2000); // Hold the box for 2 seconds
+  delay(500); // Hold the box for 2 seconds
 }
 
 // Function to drop the box (move gradually and release)
 void dropBox() {
-  smoothMove(myServo, 0, 90, 15);  // Smoothly move to 90 degrees
-  delay(1000);                     // Pause for the box to start releasing
-  smoothMove(myServo, 90, 180, 15); // Smoothly move to 180 degrees (drop box)
-  delay(2000);                     // Wait for 2 seconds
+  smoothMove(myServo, 0, 180, 15);  // Smoothly move to 90 degrees
+  delay(500); 
+  runBackwardWithoutPID(300);                    // Pause for the box to start releasing                  // Wait for 2 seconds
 }
 
 // Function to lift the gripper (servo on pin 9)
 void liftGripper() {
   smoothMove(liftServo, 0, 180, 15); // Move from 90° (down) to 0° (up)
-  delay(1000);                      // Hold the position for 1 second
+  delay(500);                      // Hold the position for 1 second
 }
 
 // Function to lower the gripper (servo on pin 9)
 void lowerGripper() {
   smoothMove(liftServo, 180, 0, 15); // Move from 0° (up) to 90° (down)
-  delay(1000);                      // Hold the position for 1 second
+  delay(500);                      // Hold the position for 1 second
 }
 
 // Function to determine the height of the box
@@ -92,8 +93,8 @@ void setupServo() {
   Serial.begin(9600); // Initialize Serial communication
 
   // Attach the servos to their respective pins
-  myServo.attach(6);      // Gripper servo on pin 6
-  liftServo.attach(9);    // Lifting servo on pin 9
+  myServo.attach(11);      // Gripper servo on pin 6
+  liftServo.attach(12);    // Lifting servo on pin 9
 
   // Initialize both servos to their starting positions
   myServo.write(180);      // Gripper open position
@@ -103,8 +104,7 @@ void setupServo() {
 
 void task6() {
   whiteline=false;
-
-  if (bluee) {
+  if (bluee){
     goForwardAndHandleJunction('L');
     runForwardWithoutPID_1(length);
     int boxHeight = detectBoxHeight();
@@ -117,55 +117,49 @@ void task6() {
     liftGripper(); //move the gripper up
     delay(1000);
     turnByAngleWithPID(180);
-    
-    if (boxHeight == 5) {
-      goForwardAndHandleJunction('S');
-      runForwardWithoutPID_1(length);
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+      if (boxHeight==5){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('R');
-      runForwardWithoutPID_1(length);
-    }
-    else if (boxHeight == 10) {
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('R');
-      runForwardWithoutPID_1(length);
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+      }
+      else if (boxHeight==10){
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('S');
-      runForwardWithoutPID_1(length);
-    }
-    else {
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('S');
-      goForwardAndHandleJunction('R');
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('S');
+          runForwardWithoutPID_1(length);
+      }
+      else {
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('R');
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('R');
-      runForwardWithoutPID_1(length);
-    }
-  }
-
-  else {
-    goForwardAndHandleJunction('L');
-    runForwardWithoutPID_1(length);
-    int boxHeight = detectBoxHeight();
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+    int boxHeight2 = detectBoxHeight();
     Serial.print("Box Height: ");
-    Serial.println(boxHeight);
+    Serial.println(boxHeight2);
     lowerGripper();
     delay(500);
     grabBox();        // Close the gripper to grab the box
@@ -173,46 +167,252 @@ void task6() {
     liftGripper(); //move the gripper up
     delay(1000);
     turnByAngleWithPID(180);
-    
-    if (boxHeight == 15) {
-      goForwardAndHandleJunction('S');
-      runForwardWithoutPID_1(length);
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+      if (boxHeight2==10){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('R');
-      goForwardAndHandleJunction('L');
-      runForwardWithoutPID_1(length);
-    }
-    else if (boxHeight == 10) {
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('R');
-      runForwardWithoutPID_1(length);
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+      else if (boxHeight2==5){
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('S');
-      runForwardWithoutPID_1(length);
-    }
-    else {
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('S');
-      goForwardAndHandleJunction('R');
-      lowerGripper();   // Move the gripper down
-      delay(500);      // Wait 1 second
-      dropBox();        // Open the gripper to release the box
-      delay(500);
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+      }
+      else {
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
 
-      turnByAngleWithPID(180);
-      goForwardAndHandleJunction('L');
-      goForwardAndHandleJunction('R');
-      runForwardWithoutPID_1(length);
-    }
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+    int boxHeight3 = detectBoxHeight();
+    Serial.print("Box Height: ");
+   // Serial.println(boxHeight3);
+    lowerGripper();
+    delay(500);
+    grabBox();        // Close the gripper to grab the box
+    delay(500); 
+    liftGripper(); //move the gripper up
+    delay(1000);
+    turnByAngleWithPID(180);   
+      if (boxHeight3==15){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          
+      }
+      else if (boxHeight3==10){
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+      }    
+      else {
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('L');
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('S');
+          runForwardWithoutPID_1(length);
+      }
   }
+  else{
+    goForwardAndHandleJunction('L');
+    runForwardWithoutPID_1(length);
+    int boxHeight = detectBoxHeight();
+    Serial.print("Box Height: ");
+    Serial.println(boxHeight3);
+    lowerGripper();
+    delay(500);
+    grabBox();        // Close the gripper to grab the box
+    delay(500); 
+    liftGripper(); //move the gripper up
+    delay(1000);
+    turnByAngleWithPID(180);
+      if (boxHeight==15){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+      }
+      else if (boxHeight==10){
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('S');
+          runForwardWithoutPID_1(length);
+      }
+      else {
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('R');
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+    int boxHeight2 = detectBoxHeight();
+    Serial.print("Box Height: ");
+    Serial.println(boxHeight2);
+    lowerGripper();
+    delay(500);
+    grabBox();        // Close the gripper to grab the box
+    delay(500); 
+    liftGripper(); //move the gripper up
+    delay(1000);
+    turnByAngleWithPID(180);
+      if (boxHeight2==10){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+      else if (boxHeight2==15){
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+      }
+      else {
+          goForwardAndHandleJunction('L');
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
+      }
+    int boxHeight3 = detectBoxHeight();
+    Serial.print("Box Height: ");
+    Serial.println(boxHeight3);
+    lowerGripper();
+    delay(500);
+    grabBox();        // Close the gripper to grab the box
+    delay(500); 
+    liftGripper(); //move the gripper up
+    delay(1000);
+    turnByAngleWithPID(180);   
+      if (boxHeight3==5){
+        goForwardAndHandleJunction('S');
+        runForwardWithoutPID_1(length);
+        lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          
+      }
+      else if (boxHeight3==10){
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+      }  
+      else {
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('L');
+          lowerGripper();   // Move the gripper down
+          delay(500);      // Wait 1 second
+          dropBox();        // Open the gripper to release the box
+          delay(500);
+
+          turnByAngleWithPID(180);
+          goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('S');
+          goForwardAndHandleJunction('S');
+          runForwardWithoutPID_1(length);
+      }
+
+      }
 }

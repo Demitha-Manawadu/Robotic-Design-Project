@@ -185,6 +185,7 @@ void runForwardWithoutPID_1(long targetCount) {
     while (abs(leftEncoderCount) < targetCount && abs(rightEncoderCount) < targetCount) {
         runForwardWithSensorPIDw();  // Move both motors at a fixed speed
     }
+    stopMotors();
 }
     // Stop the motors after reaching the target count
    

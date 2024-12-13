@@ -40,10 +40,6 @@ void goBackwardUntilJunction() {
         runBackwardWithEncoderPID();
 
         // Check for a junction
-        if (whiteline){
-        readSensors();  // Update sensor values
-        }
-        else{readSensors();}
 
         int leftCount = 0, middleCount = 0, rightCount = 0;
         countSensorRegions(leftCount, middleCount, rightCount);
@@ -67,10 +63,15 @@ void goBackwardUntilJunction() {
 void goForwardAndHandleJunction(char turnDirection) {
     int j =0;
     int leftCount, middleCount, rightCount;
+
     resetEncoders();  // Reset encoder counts
     while (true){
     // Update sensor readings
-    readSensors();
+    if (whiteline){
+        readSensors();  // Update sensor values
+        }
+    else{readSensorsw();}
+
     countSensorRegions(leftCount, middleCount, rightCount);
 
         // Run line-following PID
@@ -82,7 +83,11 @@ void goForwardAndHandleJunction(char turnDirection) {
             // Move forward a small encoder amount for junction confirmation
             resetEncoders();
             while (abs(leftEncoderCount) < 150 && abs(rightEncoderCount) < 150) {  // Adjust 50 for your robot
-                readSensors();
+                    if (whiteline){
+                     readSensors();  // Update sensor values
+                 }
+                else{readSensorsw();}
+
                 countSensorRegions(leftCount, middleCount, rightCount);
                 moveForward(150,150);
                 if (( leftCount > 2 ) ||
@@ -107,8 +112,12 @@ void goForwardAndHandleJunction(char turnDirection) {
             }
             
         
+    if (whiteline){
+        runForwardWithSensorPID(); // Update sensor values
+        }
+    else{runForwardWithSensorPIDw();}
 
-    runForwardWithSensorPID();
+    
 
 }
 }

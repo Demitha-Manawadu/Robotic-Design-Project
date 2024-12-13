@@ -1,6 +1,6 @@
 #include "SensorControl.h"
 #include <Arduino.h>
-const int sensor2Pins[8] = {13,15 , 6, 7, 8, 9, 10, 11};  // Sensor pins from 4 to 11
+const int sensor2Pins[8] = {13,47 , 7, 6, 5, 4, 41, 40};  // Sensor pins from 4 to 11
 int sensor2Values[8];  // Array to store the sensor readings
 
 // Define sensor pins from A0 to A7

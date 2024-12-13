@@ -2,7 +2,7 @@
 
 const int redThreshold = 300;
 const int blueThreshold = 200;
-
+bool bluee = false;
 ColorSensor::ColorSensor() : bluee(true) {}
 
 void ColorSensor::initialize() {

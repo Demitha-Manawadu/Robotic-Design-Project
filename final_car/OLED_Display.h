@@ -26,6 +26,7 @@ public:
     void drawMenu(const char *title, const char* items[], int numItems, int currentIndex, int itemsPerPage);
     void drawTaskScreen(const char *taskName, const char *taskMessage);
      void printEncoderCounts(int leftEncoderCount, int rightEncoderCount);
+     void displayArray(int k[],int len) ;
 private:
     Adafruit_SSD1306 display;
 };

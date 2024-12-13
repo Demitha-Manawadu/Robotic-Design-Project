@@ -3,7 +3,7 @@
 #include "OLED_Display.h"
 #include "MotorControl.h"
 #include "SensorControl.h"
-
+#include "roboArm.h"
 #include "OLED_Display.h"
 
 #include "Buzzer.h"
@@ -25,7 +25,7 @@ static const char* menuItems[] = {
     "Item Five",
     "Item Six",
     "Item Seven",
-    "Item Eight",
+    "printEncoderCounts",
     "Item Nine"
 };
 static const int numItems = sizeof(menuItems)/sizeof(menuItems[0]);
@@ -140,8 +140,7 @@ void menu_draw() {
           //runBackwardWithEncoderPID();
         }
         if (taskIndex ==3){
-          while(true){
-          task2();}
+          task_2(3);
           currentState = MENU_STATE_MAIN;
         }
         if (taskIndex ==4){
@@ -152,15 +151,20 @@ void menu_draw() {
           followLineAndTurnWithSquareDetection();
           currentState = MENU_STATE_MAIN;
         }
-        if (taskIndex ==15){
+        if (taskIndex ==6){
+          lowerGripper();
+          currentState = MENU_STATE_MAIN;
+
+        }
+        if (taskIndex ==8){
+          task6();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==7){
           while(true){
           oled.printEncoderCounts(leftEncoderCount,rightEncoderCount);}
           currentState = MENU_STATE_MAIN;
 
-        }
-        if (taskIndex ==0){
-        task_2(4);
-        currentState = MENU_STATE_MAIN;
         }
 
          else {
