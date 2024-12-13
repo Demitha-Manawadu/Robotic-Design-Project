@@ -12,10 +12,10 @@ const int enaPin = 8;
 const int enbPin = 9;
 
 // Encoder pins
-const int leftEncoderA = 19;
 const int leftEncoderB = 18;
-const int rightEncoderA = 2;
+const int leftEncoderA = 19;
 const int rightEncoderB = 3;
+const int rightEncoderA = 2;
 
 // Encoder counts
 volatile long leftEncoderCount = 0;
@@ -78,6 +78,7 @@ void stopMotors() {
   digitalWrite(leftMotorBackward, HIGH);
   digitalWrite(rightMotorForward, HIGH);
   digitalWrite(rightMotorBackward, HIGH);
+  delay(10);
 }
 
 
@@ -99,61 +100,51 @@ void moveBackward(int leftSpeed, int rightSpeed) {
   digitalWrite(rightMotorForward, LOW);
   digitalWrite(rightMotorBackward, HIGH);
 }
-void turnByAngleWithPID(float targetAngle) {
-  // Reset encoders
+void turnByAngleWithPID(int angle) {
+  // Convert the angle into target encoder counts
+  long encoderTarget = abs(angle) * 11.7;
   leftEncoderCount = 0;
   rightEncoderCount = 0;
 
-  // PID control variables
-  turnIntegral = 0;
-  turnLastError = 0;
+  // PID control loop
+  while (abs(leftEncoderCount) < encoderTarget && abs(rightEncoderCount) < encoderTarget) {
+    long error = abs(leftEncoderCount) - abs(rightEncoderCount);
 
-  // Calculate the target encoder counts for the given angle
-  long targetCounts = targetAngle * 12;
-
-  while (true) {
-    // Calculate the current position
-    long averageCounts = (abs(leftEncoderCount) + abs(rightEncoderCount)) / 2;
-
-    // Calculate the error (remaining counts to target)
-    long error = targetCounts - averageCounts;
-
-    // Break when the target is achieved (allowable error threshold)
-    if (abs(error) < 10) {  // 10 counts tolerance
-      break;
-    }
-
-    // Compute PID values
+    // PID calculation
     turnIntegral += error;
-    long derivative = error - turnLastError;
+    float derivative = error - turnLastError;
     float output = turnKp * error + turnKi * turnIntegral + turnKd * derivative;
     turnLastError = error;
 
-    // Constrain the PID output to valid speed range
-    int turnSpeed = constrain(abs(output), 50, 255);
+    // Adjust motor speeds based on PID output
+    int baseSpeed = 180;  // You can adjust this base speed as needed
+    int leftSpeed = baseSpeed + output;
+    int rightSpeed = baseSpeed - output;
 
-    // Determine direction of rotation
-    if (error > 0) {
-      // Clockwise rotation
-      analogWrite(enbPin, turnSpeed);  // Set left motor speed
-      analogWrite(enaPin, turnSpeed); // Set right motor speed
+    // Ensure motor speeds are within valid range
+    leftSpeed = constrain(leftSpeed, 150, 250);
+    rightSpeed = constrain(rightSpeed, 150, 250);
+
+    if (angle > 0) {
+      // Turn right: left motor moves forward, right motor moves backward
+      analogWrite(enbPin, leftSpeed);
+      analogWrite(enaPin, rightSpeed);
       digitalWrite(leftMotorForward, HIGH);
       digitalWrite(leftMotorBackward, LOW);
       digitalWrite(rightMotorForward, LOW);
       digitalWrite(rightMotorBackward, HIGH);
     } else {
-      // Counterclockwise rotation
-      analogWrite(enbPin, turnSpeed);  // Set left motor speed
-      analogWrite(enaPin, turnSpeed); // Set right motor speed
+      // Turn left: left motor moves backward, right motor moves forward
+      analogWrite(enbPin, leftSpeed);
+      analogWrite(enaPin, rightSpeed);
       digitalWrite(leftMotorForward, LOW);
       digitalWrite(leftMotorBackward, HIGH);
       digitalWrite(rightMotorForward, HIGH);
       digitalWrite(rightMotorBackward, LOW);
-      
     }
   }
 
-  // Stop the motors after turning
+  // Stop motors after reaching the target
   stopMotors();
 }
 
@@ -172,5 +163,16 @@ void runForwardWithoutPID(long targetCount) {
         moveForward(120, 120);  // Move both motors at a fixed speed
     }
     // Stop the motors after reaching the target count
-    moveForward(0, 0);
+    stopMotors();
+}
+void runBackwardWithoutPID(long targetCount) {
+    leftEncoderCount = 0;
+    rightEncoderCount = 0;
+
+    // Keep moving forward until the encoder counts reach the target
+    while (abs(leftEncoderCount) < targetCount && abs(rightEncoderCount) < targetCount) {
+        moveBackward(150, 150);  // Move both motors at a fixed speed
+    }
+    // Stop the motors after reaching the target count
+    stopMotors();
 }

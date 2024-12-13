@@ -3,31 +3,30 @@
 #include "OLED_Display.h"
 #include "MotorControl.h"
 #include "SensorControl.h"
+
 #include "OLED_Display.h"
+
 #include "Buzzer.h"
 #include "ColorSensor.h"
 #include "LineFollowAndTurn.h"
+#include "PIDControl.h"
 #include "task2.h"
 #include "button.h"
-#include "PIDControl.h"
+
 // Extern the oled object defined in main.ino
 extern OLEDDisplay oled;
 
 // Menu items
 static const char* menuItems[] = {
-    "tasK_1",
-    "task_2",
-    "task_3",
-    "task_4",
-    "task_5",
-    "task_6",
-    "task_7",
-    "task_8",
-    "task_all",
-    "task_HIDDEN",
-    "task__",
-    "task__",
-    "task__",
+    "Item One",
+    "Item Two",
+    "Item Three",
+    "Item Four",
+    "Item Five",
+    "Item Six",
+    "Item Seven",
+    "Item Eight",
+    "Item Nine"
 };
 static const int numItems = sizeof(menuItems)/sizeof(menuItems[0]);
 
@@ -38,18 +37,14 @@ typedef struct {
 } Task;
 
 static Task tasks[] = {
-    {"Task One", "detectBarcode"},
-    {"Task Two", "Virtual_box"},
-    {"Task Three", "Color_line_following"},
-    {"Task Four", "dotted_line_following"},
-    {"Task Five", "task_2()"},
+    {"Task One", "Doing Task One Stuff"},
+    {"Task Two", "runForwardWithSensorPID"},
+    {"Task Three", "Running Task Three"},
+    {"Task Four", "This is Task Four"},
+    {"Task Five", "Task Five in progress"},
     {"Task Six", "Task Six Doing Its Thing"},
     {"Task Seven", "Working on Task Seven"},
     {"Task Eight", "Task Eight Busy..."},
-    {"Task Nine", "Ninth Task Rolling"},
-    {"Task Nine", "Ninth Task Rolling"},
-    {"Task Nine", "Ninth Task Rolling"},
-    {"Task Nine", "Ninth Task Rolling"},
     {"Task Nine", "Ninth Task Rolling"}
 };
 
@@ -73,7 +68,7 @@ void menu_update(button_t btn) {
         switch(btn) {
             case BTN_FORWARD:
                 if (currentIndex > 0) currentIndex--;
-                else currentIndex=12;
+                else currentIndex=8;
                 break;
             case BTN_BACKWARD:
                 if (currentIndex < numItems - 1) currentIndex++;
@@ -116,28 +111,29 @@ void menu_draw() {
         if (taskIndex >= 0 && taskIndex < numItems) {
             oled.drawTaskScreen(tasks[taskIndex].taskName, tasks[taskIndex].taskMessage);
         }
-        if (taskIndex ==0){ 
-          //detectBarcode();
-        }
         if (taskIndex ==1){
-        task_2();
-        currentState = MENU_STATE_MAIN;
+          leftEncoderCount=0;
+          rightEncoderCount=0;
+          while(true){
+          runBackwardWithEncoderPID();}
+          currentState = MENU_STATE_MAIN;
         }
         if (taskIndex ==2){
-          //runForwardWithSensorPID();
-        }
-        if (taskIndex ==3){
-          runForwardWithSensorPID();
-          //currentState = MENU_STATE_MAIN;
-
-        }
-        if (taskIndex ==4){
-          followLineAndTurnWithSquareDetection();}
-        
-
-        if (taskIndex ==5){
+          followLineAndTurnWithSquareDetection();
+          currentState = MENU_STATE_MAIN;
           //runBackwardWithEncoderPID();
         }
+        if (taskIndex ==3){
+          while(true){
+          runForwardWithSensorPID();}
+          currentState = MENU_STATE_MAIN;
+
+        }
+        if (taskIndex ==0){
+        task_2(4);
+        currentState = MENU_STATE_MAIN;
+        }
+
          else {
             oled.drawTaskScreen("Unknown Task", "No Data");
         }

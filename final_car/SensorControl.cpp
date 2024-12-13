@@ -51,8 +51,9 @@ void readSensors() {
     // Read and normalize sensor values to binary
     for (int i = 0; i < NUM_SENSORS; i++) {
         int sensorValue = analogRead(sensorPins[i]);
-        int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;  // Calculate dynamic threshold
-        sensorValues[i] = (sensorValue > threshold) ? 0 : 1;        // Convert to binary output
+        //int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;  // Calculate dynamic threshold
+        int threshold = 200;
+        sensorValues[i] = (sensorValue > threshold) ? 1 : 0;        // Convert to binary output
     }
 
     // Debugging: Print sensor values

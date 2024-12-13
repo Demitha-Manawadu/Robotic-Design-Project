@@ -12,10 +12,11 @@ void moveBackward(int leftSpeed, int rightSpeed);
 void stopMotors();
 
 // Function to turn based on angle using PID control
-void turnByAngleWithPID(float angle);  // Turns based on positive or negative angle
+void turnByAngleWithPID(int angle);  // Turns based on positive or negative angle
 void displayEncoderCounts();
 void resetEncoders();
 // Encoder functions
+void runBackwardWithoutPID(long targetCount);
 void runForwardWithoutPID(long targetCount);
 void leftEncoderISR();
 void rightEncoderISR();

@@ -3,7 +3,8 @@
 #define BUZZER_PIN A12  // Define the buzzer pin as a constant
 
 Buzzer::Buzzer() {
-    pinMode(BUZZER_PIN, OUTPUT);  // Set the fixed buzzer pin as output
+    pinMode(BUZZER_PIN, OUTPUT);
+    digitalWrite(BUZZER_PIN, LOW);  // Set the fixed buzzer pin as output
 }
 void Buzzer::playBeep() {
     tone(BUZZER_PIN, 256, 200);  // Play a 200ms beep at 1000Hz frequency
