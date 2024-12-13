@@ -5,7 +5,7 @@
 #include "task2.h"
 #include "MotorControl.h"
 #include "roboArm.h"
-int length=4000;
+int length=3200;
 // Create servo objects for two servos
 Servo myServo;       // Servo for grabbing/dropping the box
 Servo liftServo;     // Servo for lifting/lowering the gripper

@@ -5,24 +5,18 @@
 
 class ColorSensor {
 public:
-    bool bluee;
-    // Constructor to initialize threshold values (optional)
-    ColorSensor(int redMin = 20, int redMax = 80, int blueMin = 30, int blueMax = 70);
+    static const int S0 = 23;
+    static const int S1 = 24;
+    static const int S2 = 25;
+    static const int S3 = 26;
+    static const int OUT = 27;
+    static const int redLED = 41;  // Pin for red LED
+    static const int blueLED = 49; // Pin for blue LED
+    bool bluee; // Tracks if a color is detected (default true)
 
-    // Initialization function to set up pins and settings
+    ColorSensor();
     void initialize();
-
-    // Function to detect color and light up corresponding LED
     void detectColor();
-
-private:
-    // Pin definitions
-    const int S0 = 24, S1 = 25, S2 = 26, S3 = 27, OUT = 28;
-    const int redLED = 51, blueLED = 53;
-
-    // Threshold values for color detection
-    int redMinThreshold, redMaxThreshold;
-    int blueMinThreshold, blueMaxThreshold;
 };
 
 #endif

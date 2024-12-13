@@ -1,5 +1,7 @@
 #include "SensorControl.h"
 #include <Arduino.h>
+const int sensor2Pins[8] = {4, 5, 6, 7, 8, 9, 10, 11};  // Sensor pins from 4 to 11
+int sensor2Values[8];  // Array to store the sensor readings
 
 // Define sensor pins from A0 to A7
 const int sensorPins[NUM_SENSORS] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11};
@@ -13,9 +15,15 @@ void initializeSensors() {
         calibratedMin[i] = 1023;  // Set initial min value (maximum possible analog reading)
         calibratedMax[i] = 0;     // Set initial max value (minimum possible analog reading)
     }
+    for (int i = 0; i < 8; i++) {
+        pinMode(sensor2Pins[i], INPUT);
+    }
     Serial.println("Sensors initialized.");
 }
-
+void digitalread(){
+  for (int i = 0; i < 8; i++) {
+  sensor2Values[i] = digitalRead(sensor2Pins[i]);}
+}
 void calibrateSensors() {
     Serial.println("Calibrating sensors...");
 

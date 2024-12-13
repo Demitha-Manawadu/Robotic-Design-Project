@@ -125,7 +125,13 @@ void menu_draw() {
         }
         if (taskIndex ==3){
           while(true){
-          runForwardWithSensorPID();}
+          runForwardWithSensorPIDw();}
+          currentState = MENU_STATE_MAIN;
+
+        }
+        if (taskIndex ==4){
+          while(true){
+          oled.printEncoderCounts(leftEncoderCount,rightEncoderCount);}
           currentState = MENU_STATE_MAIN;
 
         }
