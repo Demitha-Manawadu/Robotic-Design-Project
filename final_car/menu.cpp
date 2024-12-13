@@ -18,8 +18,8 @@ extern OLEDDisplay oled;
 
 // Menu items
 static const char* menuItems[] = {
-    "Item One",
-    "Item Two",
+    "Task All",
+    "Calibrate sensors",
     "Item Three",
     "Item Four",
     "Item Five",
@@ -112,6 +112,22 @@ void menu_draw() {
             oled.drawTaskScreen(tasks[taskIndex].taskName, tasks[taskIndex].taskMessage);
         }
         if (taskIndex ==1){
+          calibrateSensors();
+          currentState = MENU_STATE_MAIN;
+          //runBackwardWithEncoderPID();
+        }
+        if (taskIndex ==1){
+          calibrateSensors();
+          currentState = MENU_STATE_MAIN;
+          //runBackwardWithEncoderPID();
+        }
+        if (taskIndex ==2){
+          followLineAndTurnWithSquareDetection();
+          currentState = MENU_STATE_MAIN;
+          //runBackwardWithEncoderPID();
+        }
+
+        if (taskIndex ==11){
           leftEncoderCount=0;
           rightEncoderCount=0;
           while(true){
@@ -125,11 +141,18 @@ void menu_draw() {
         }
         if (taskIndex ==3){
           while(true){
-          runForwardWithSensorPIDw();}
+          task2();}
           currentState = MENU_STATE_MAIN;
-
         }
         if (taskIndex ==4){
+          followLineAndTurnWithSquareDetection();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==5){
+          followLineAndTurnWithSquareDetection();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==15){
           while(true){
           oled.printEncoderCounts(leftEncoderCount,rightEncoderCount);}
           currentState = MENU_STATE_MAIN;

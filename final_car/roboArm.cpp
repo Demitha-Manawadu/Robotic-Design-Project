@@ -102,6 +102,7 @@ void setupServo() {
 }
 
 void task6() {
+  whiteline=false;
 
   if (bluee) {
     goForwardAndHandleJunction('L');

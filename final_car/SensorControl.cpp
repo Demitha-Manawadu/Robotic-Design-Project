@@ -1,6 +1,6 @@
 #include "SensorControl.h"
 #include <Arduino.h>
-const int sensor2Pins[8] = {4, 5, 6, 7, 8, 9, 10, 11};  // Sensor pins from 4 to 11
+const int sensor2Pins[8] = {13,15 , 6, 7, 8, 9, 10, 11};  // Sensor pins from 4 to 11
 int sensor2Values[8];  // Array to store the sensor readings
 
 // Define sensor pins from A0 to A7
@@ -8,6 +8,7 @@ const int sensorPins[NUM_SENSORS] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10
 int sensorValues[NUM_SENSORS];
 int calibratedMin[NUM_SENSORS];
 int calibratedMax[NUM_SENSORS];
+int tresh[NUM_SENSORS]={200, 200, 200, 200, 200, 200, 200,200, 200, 200, 200, 200};
 
 void initializeSensors() {
     // Initialize all sensors
@@ -34,7 +35,7 @@ void calibrateSensors() {
     }
 
     // Perform calibration
-    for (int j = 0; j < 200; j++) {  // Collect calibration data over 200 iterations
+    for (int j = 0; j < 400; j++) {  // Collect calibration data over 200 iterations
         for (int i = 0; i < NUM_SENSORS; i++) {
             int sensorValue = analogRead(sensorPins[i]);
             calibratedMin[i] = min(calibratedMin[i], sensorValue);  // Update min value
@@ -42,7 +43,10 @@ void calibrateSensors() {
         }
         delay(20);  // Short delay between readings
     }
-
+    // Collect calibration data over 200 iterations
+    for (int i = 0; i < NUM_SENSORS; i++) {
+      tresh[i]=(calibratedMin[i] + calibratedMax[i]) / 2;
+    }
     Serial.println("Calibration complete.");
     Serial.println("Calibrated Min and Max values:");
     for (int i = 0; i < NUM_SENSORS; i++) {
@@ -59,9 +63,9 @@ void readSensors() {
     // Read and normalize sensor values to binary
     for (int i = 0; i < NUM_SENSORS; i++) {
         int sensorValue = analogRead(sensorPins[i]);
-        //int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;  // Calculate dynamic threshold
-        int threshold = 200;
-        sensorValues[i] = (sensorValue > threshold) ? 1 : 0;        // Convert to binary output
+        // //int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;  // Calculate dynamic threshold
+        // int threshold = 200;
+        sensorValues[i] = (sensorValue > tresh[i]) ? 1 : 0;        // Convert to binary output
     }
 
     // Debugging: Print sensor values
@@ -78,8 +82,8 @@ void readSensorsw() {
     for (int i = 0; i < NUM_SENSORS; i++) {
         int sensorValue = analogRead(sensorPins[i]);
         //int threshold = (calibratedMin[i] + calibratedMax[i]) / 2;  // Calculate dynamic threshold
-        int threshold = 200;
-        sensorValues[i] = (sensorValue > threshold) ? 0 : 1;        // Convert to binary output
+        //int threshold = 200;
+        sensorValues[i] = (sensorValue > tresh[i]) ? 0 : 1;        // Convert to binary output
     }
 
     // Debugging: Print sensor values

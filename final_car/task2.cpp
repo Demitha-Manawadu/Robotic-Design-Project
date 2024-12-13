@@ -6,7 +6,7 @@
 #include "PIDControl.h"
 #include "Buzzer.h"
 Buzzer buzzer2;
-
+int whiteline =1;
 int gate =0;
 void countSensorRegions(int &leftCount, int &middleCount, int &rightCount) {
     leftCount = 0;
@@ -40,7 +40,10 @@ void goBackwardUntilJunction() {
         runBackwardWithEncoderPID();
 
         // Check for a junction
+        if (whiteline){
         readSensors();  // Update sensor values
+        }
+        else{readSensors();}
 
         int leftCount = 0, middleCount = 0, rightCount = 0;
         countSensorRegions(leftCount, middleCount, rightCount);
