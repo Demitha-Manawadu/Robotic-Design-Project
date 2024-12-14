@@ -476,15 +476,16 @@ liftGripper();
 turnByAngleWithPID(-190);
 goForwardAndHandleJunction('R');
 // HIDDEN TASK
+liftGripper();
 goForwardAndHandleJunction('S');
-runForwardWithoutPID_1(700); 
+runForwardWithoutPID_1(660); 
 lowerGripper();   // Move the gripper down
 delay(500);      // Wait 1 second
 dropBox(); 
 runBackwardWithoutPID(500);       // Open the gripper to release the box
 delay(500);
 grabBox();
-runForwardWithoutPID(500);
+runForwardWithoutPID(700);
 turnByAngleWithPID(-180);
 goForwardAndHandleJunction('R');goForwardAndHandleJunction('S');
 runForwardWithoutPID(2000);

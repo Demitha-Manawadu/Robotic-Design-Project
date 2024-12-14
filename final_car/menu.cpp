@@ -23,7 +23,7 @@ extern OLEDDisplay oled;
 static const char* menuItems[] = {
     "Task All",
     "Calibrate sensors",
-    "barcode",
+    "looping",
     "virtual",
     "color",
     "dotted",
@@ -138,9 +138,9 @@ void menu_draw() {
           //runBackwardWithEncoderPID();
         }
         if (taskIndex ==2){
-          wasWhite=false;
+          
           //moveForwardWithEncoders();
-          detection();
+          looping();
           currentState = MENU_STATE_MAIN;
           //runBackwardWithEncoderPID();
         }
@@ -179,7 +179,7 @@ void menu_draw() {
           //checkBarrier();
           currentState = MENU_STATE_MAIN;
         }
-
+ 
         if (taskIndex ==11){
           leftEncoderCount=0;
           rightEncoderCount=0;
