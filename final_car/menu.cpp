@@ -5,14 +5,17 @@
 #include "SensorControl.h"
 #include "roboArm.h"
 #include "OLED_Display.h"
-
+#include "RobotControl.h"
 #include "Buzzer.h"
 #include "ColorSensor.h"
 #include "LineFollowAndTurn.h"
 #include "PIDControl.h"
 #include "task2.h"
 #include "button.h"
-
+#include "coindrop.h"
+#include "Barcode.h"
+#include "ColorSensor.h"
+ColorSensor c1;
 // Extern the oled object defined in main.ino
 extern OLEDDisplay oled;
 
@@ -20,13 +23,15 @@ extern OLEDDisplay oled;
 static const char* menuItems[] = {
     "Task All",
     "Calibrate sensors",
-    "Item Three",
-    "Item Four",
-    "Item Five",
-    "Item Six",
-    "Item Seven",
-    "printEncoderCounts",
-    "Item Nine"
+    "barcode",
+    "virtual",
+    "color",
+    "dotted",
+    "door",
+    "box",
+    "chamber",
+    "lastone"
+ 
 };
 static const int numItems = sizeof(menuItems)/sizeof(menuItems[0]);
 
@@ -43,9 +48,10 @@ static Task tasks[] = {
     {"Task Four", "This is Task Four"},
     {"Task Five", "Task Five in progress"},
     {"Task Six", "Task Six Doing Its Thing"},
-    {"Task Seven", "Working on Task Seven"},
+    {"Task Seven", "portal nav"},
     {"Task Eight", "Task Eight Busy..."},
-    {"Task Nine", "Ninth Task Rolling"}
+    {"Task Nine", "Ninth Task Rolling"},
+    {"Task ten", "Ninth Task Rolling"}
 };
 
 // Ensure tasks and items match in count
@@ -111,10 +117,20 @@ void menu_draw() {
         if (taskIndex >= 0 && taskIndex < numItems) {
             oled.drawTaskScreen(tasks[taskIndex].taskName, tasks[taskIndex].taskMessage);
         }
-        if (taskIndex ==1){
-          calibrateSensors();
+        if (taskIndex ==0){
+          // turnByAngleWithPID(-90); 
+          // delay(1000);
+          task_2(2);
+          c1.detectColor();
+          runForwardWithoutPID(1000);
+          followLineAndTurnWithSquareDetection();
+          runForwardWithoutPID(1000);
+          moveForwardUntilWhiteSquare();
+          checkBarrier();
+          task6();
+          chamber();
+          looping();
           currentState = MENU_STATE_MAIN;
-          //runBackwardWithEncoderPID();
         }
         if (taskIndex ==1){
           calibrateSensors();
@@ -122,9 +138,46 @@ void menu_draw() {
           //runBackwardWithEncoderPID();
         }
         if (taskIndex ==2){
-          followLineAndTurnWithSquareDetection();
+          wasWhite=false;
+          //moveForwardWithEncoders();
+          detection();
           currentState = MENU_STATE_MAIN;
           //runBackwardWithEncoderPID();
+        }
+
+
+        if (taskIndex ==3){
+          task_2(3);
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==4){
+          c1.detectColor();
+          followLineAndTurnWithSquareDetection();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==5){
+          runForwardWithoutPID(1000);
+          moveForwardUntilWhiteSquare();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==6){                 
+          checkBarrier();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==7){
+          task6();
+          currentState = MENU_STATE_MAIN;
+
+        }
+        if (taskIndex ==8){
+          chamber();
+          currentState = MENU_STATE_MAIN;
+        }
+        if (taskIndex ==9){
+          liftGripper();
+          looping();
+          //checkBarrier();
+          currentState = MENU_STATE_MAIN;
         }
 
         if (taskIndex ==11){
@@ -134,39 +187,6 @@ void menu_draw() {
           runBackwardWithEncoderPID();}
           currentState = MENU_STATE_MAIN;
         }
-        if (taskIndex ==2){
-          followLineAndTurnWithSquareDetection();
-          currentState = MENU_STATE_MAIN;
-          //runBackwardWithEncoderPID();
-        }
-        if (taskIndex ==3){
-          task_2(3);
-          currentState = MENU_STATE_MAIN;
-        }
-        if (taskIndex ==4){
-          followLineAndTurnWithSquareDetection();
-          currentState = MENU_STATE_MAIN;
-        }
-        if (taskIndex ==5){
-          followLineAndTurnWithSquareDetection();
-          currentState = MENU_STATE_MAIN;
-        }
-        if (taskIndex ==6){
-          lowerGripper();
-          currentState = MENU_STATE_MAIN;
-
-        }
-        if (taskIndex ==8){
-          task6();
-          currentState = MENU_STATE_MAIN;
-        }
-        if (taskIndex ==7){
-          while(true){
-          oled.printEncoderCounts(leftEncoderCount,rightEncoderCount);}
-          currentState = MENU_STATE_MAIN;
-
-        }
-
          else {
             oled.drawTaskScreen("Unknown Task", "No Data");
         }

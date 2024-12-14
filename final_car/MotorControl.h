@@ -10,6 +10,7 @@ extern volatile long rightEncoderCount;
 void moveForward(int leftSpeed, int rightSpeed);
 void moveBackward(int leftSpeed, int rightSpeed);
 void stopMotors();
+void moveForwardWithEncoders();
 
 // Function to turn based on angle using PID control
 void turnByAngleWithPID(int angle);  // Turns based on positive or negative angle

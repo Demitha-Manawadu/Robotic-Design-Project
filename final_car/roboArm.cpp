@@ -5,7 +5,7 @@
 #include "task2.h"
 #include "MotorControl.h"
 #include "roboArm.h"
-int length=1400;
+int length=1550;
 // Create servo objects for two servos
 Servo myServo;       // Servo for grabbing/dropping the box
 Servo liftServo;     // Servo for lifting/lowering the gripper
@@ -103,6 +103,8 @@ void setupServo() {
 }
 
 void task6() {
+
+  bluee=1-gate;
   whiteline=false;
   if (bluee){
     goForwardAndHandleJunction('L');
@@ -115,8 +117,8 @@ void task6() {
     grabBox();        // Close the gripper to grab the box
     delay(500); 
     liftGripper(); //move the gripper up
-    delay(1000);
-    turnByAngleWithPID(180);
+    delay(500);
+    turnByAngleWithPID(-180);
       if (boxHeight==5){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -125,7 +127,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('L');
           runForwardWithoutPID_1(length);
@@ -139,7 +141,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('S');
           runForwardWithoutPID_1(length);
       }
@@ -147,12 +149,13 @@ void task6() {
           goForwardAndHandleJunction('L');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
           lowerGripper();   // Move the gripper down
           delay(500);      // Wait 1 second
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('L');
           goForwardAndHandleJunction('R');
           runForwardWithoutPID_1(length);
@@ -166,7 +169,7 @@ void task6() {
     delay(500); 
     liftGripper(); //move the gripper up
     delay(1000);
-    turnByAngleWithPID(180);
+    turnByAngleWithPID(-180);
       if (boxHeight2==10){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -175,9 +178,9 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
-          goForwardAndHandleJunction('L');
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
           runForwardWithoutPID_1(length);
       }
       else if (boxHeight2==5){
@@ -189,7 +192,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('L');
@@ -204,8 +207,8 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
-          goForwardAndHandleJunction('R');
+          turnByAngleWithPID(-180);
+          goForwardAndHandleJunction('S');
           runForwardWithoutPID_1(length);
       }
     int boxHeight3 = detectBoxHeight();
@@ -217,7 +220,7 @@ void task6() {
     delay(500); 
     liftGripper(); //move the gripper up
     delay(1000);
-    turnByAngleWithPID(180);   
+    turnByAngleWithPID(-180);   
       if (boxHeight3==15){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -226,7 +229,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           
       }
@@ -239,7 +242,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
       }    
@@ -247,16 +250,17 @@ void task6() {
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
           lowerGripper();   // Move the gripper down
           delay(500);      // Wait 1 second
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('S');
-          runForwardWithoutPID_1(length);
+          
       }
   }
   else{
@@ -271,7 +275,7 @@ void task6() {
     delay(500); 
     liftGripper(); //move the gripper up
     delay(1000);
-    turnByAngleWithPID(180);
+    turnByAngleWithPID(-180);
       if (boxHeight==15){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -280,7 +284,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('L');
           runForwardWithoutPID_1(length);
@@ -294,7 +298,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('S');
           runForwardWithoutPID_1(length);
       }
@@ -302,12 +306,13 @@ void task6() {
           goForwardAndHandleJunction('L');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('R');
+          runForwardWithoutPID_1(length);
           lowerGripper();   // Move the gripper down
           delay(500);      // Wait 1 second
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('L');
           goForwardAndHandleJunction('R');
           runForwardWithoutPID_1(length);
@@ -321,7 +326,7 @@ void task6() {
     delay(500); 
     liftGripper(); //move the gripper up
     delay(1000);
-    turnByAngleWithPID(180);
+    turnByAngleWithPID(-180);
       if (boxHeight2==10){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -330,9 +335,9 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
-          goForwardAndHandleJunction('L');
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
+          goForwardAndHandleJunction('L');
           runForwardWithoutPID_1(length);
       }
       else if (boxHeight2==15){
@@ -344,7 +349,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('L');
@@ -359,7 +364,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('S');
           runForwardWithoutPID_1(length);
       }
@@ -372,7 +377,7 @@ void task6() {
     delay(500); 
     liftGripper(); //move the gripper up
     delay(1000);
-    turnByAngleWithPID(180);   
+    turnByAngleWithPID(-180);   
       if (boxHeight3==5){
         goForwardAndHandleJunction('S');
         runForwardWithoutPID_1(length);
@@ -381,7 +386,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           
       }
@@ -394,7 +399,7 @@ void task6() {
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
       }  
@@ -402,17 +407,87 @@ void task6() {
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('L');
+          runForwardWithoutPID_1(length);
           lowerGripper();   // Move the gripper down
           delay(500);      // Wait 1 second
           dropBox();        // Open the gripper to release the box
           delay(500);
 
-          turnByAngleWithPID(180);
+          turnByAngleWithPID(-180);
           goForwardAndHandleJunction('R');
           goForwardAndHandleJunction('S');
           goForwardAndHandleJunction('S');
-          runForwardWithoutPID_1(length);
+          
       }
 
       }
+    goForwardAndHandleJunction('S');
+    runForwardWithoutPID(300);
+    turnByAngleWithPID(-90);
+    runForwardWithoutPID(600);
+    // goForwardAndHandleJunction('L');
+    // goForwardAndHandleJunction('S');
+    // lowerGripper();
+    // delay(500);
+    // grabBox();        // Close the gripper to grab the box
+    // delay(500); 
+    // liftGripper(); //move the gripper up
+    // delay(1000);
+    // turnByAngleWithPID(-180);
+    // goForwardAndHandleJunction('L');
+}
+void chamber() {
+  whiteline=false;
+  // int sensorValue = readSharpAnalog();
+  // if (sensorValue > 100) {
+  //   stopRobot(); // Stop the robot if the sensor value exceeds the threshold
+  // }
+
+goForwardAndHandleJunction('L');
+goForwardAndHandleJunction('S');
+lowerGripper();
+delay(500);
+grabBox();        // Close the gripper to grab the box
+delay(500); 
+liftGripper(); //move the gripper up
+delay(500);
+turnByAngleWithPID(-180);
+goForwardAndHandleJunction('L');
+
+goForwardAndHandleJunction('S');
+goForwardAndHandleJunction('R');
+lowerGripper(); 
+runForwardWithoutPID_1(2300); 
+// while (true){
+//   int count=0;
+//   readSensorsw();
+// for (int i = 0; i < NUM_SENSORS; i++) {
+//       if (sensorValues[i] == 0) {
+//         count+=1;
+//         }  // If the sensor detects the line
+//       runForwardWithSensorPIDw();
+//       if (count==12){
+//         stopMotors();
+//         break;} 
+//       }
+// }
+liftGripper();
+
+turnByAngleWithPID(-190);
+goForwardAndHandleJunction('R');
+// HIDDEN TASK
+goForwardAndHandleJunction('S');
+runForwardWithoutPID_1(700); 
+lowerGripper();   // Move the gripper down
+delay(500);      // Wait 1 second
+dropBox(); 
+runBackwardWithoutPID(500);       // Open the gripper to release the box
+delay(500);
+grabBox();
+runForwardWithoutPID(500);
+turnByAngleWithPID(-180);
+goForwardAndHandleJunction('R');goForwardAndHandleJunction('S');
+runForwardWithoutPID(2000);
+turnByAngleWithPID(90);
+liftGripper();
 }

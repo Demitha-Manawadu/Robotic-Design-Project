@@ -5,9 +5,11 @@
 #include "SensorControl.h"
 #include "PIDControl.h"
 #include "Buzzer.h"
+#include "roboArm.h"
 Buzzer buzzer2;
 int whiteline =1;
 int gate =0;
+int gat2;
 void countSensorRegions(int &leftCount, int &middleCount, int &rightCount) {
     leftCount = 0;
     middleCount = 0;
@@ -33,19 +35,17 @@ void countSensorRegions(int &leftCount, int &middleCount, int &rightCount) {
 
 void goBackwardUntilJunction() {
   runBackwardWithoutPID(800);
-    leftEncoderCount=0;
-    rightEncoderCount=0;
     while (true) {
         // Move backward using PID
         runBackwardWithEncoderPID();
 
         // Check for a junction
-
+        readSensors();
         int leftCount = 0, middleCount = 0, rightCount = 0;
         countSensorRegions(leftCount, middleCount, rightCount);
 
         // Junction detection logic: Adjust thresholds as needed
-        if ( leftCount >= 4 || rightCount >= 4) {
+        if ( leftCount >= 3 || rightCount >= 3) {
             // Example: Junction detected if multiple sensors in all regions detect the line
             Serial.println("Junction detected. Stopping...");
             stopMotors();
@@ -89,12 +89,12 @@ void goForwardAndHandleJunction(char turnDirection) {
                 else{readSensorsw();}
 
                 countSensorRegions(leftCount, middleCount, rightCount);
-                moveForward(150,150);
+                moveForward(120,120);
                 if (( leftCount > 2 ) ||
                     ( rightCount > 2 )) {
                     Serial.println("Junction confirmed.");
                     j=1;
-                    delay(100);
+                    delay(300);
                     }
             }
         }
@@ -149,8 +149,9 @@ void task_2(int no5){
     corrector();
     goForwardAndHandleJunction('L');
     goForwardAndHandleJunction('S');
-    //check for gate 
-    gate =1;
+    gat2= readSharpAnalog();
+    if (gat2>50){gate =1;}
+    else{gate =0;}
     turnByAngleWithPID(-90); 
     goForwardAndHandleJunction('S');
     buzzer2.playBeep();
@@ -175,8 +176,9 @@ void task_2(int no5){
     goForwardAndHandleJunction('R');
     goForwardAndHandleJunction('L');
     delay(1000);
-    //check for gate 
-    gate =0;
+    gat2= readSharpAnalog();
+    if (gat2>50){gate =1;}
+    else{gate =0;}
     if (!gate){
       if (no5==1){
         turnByAngleWithPID(180); 
@@ -186,6 +188,7 @@ void task_2(int no5){
         goBackwardUntilJunction();goBackwardUntilJunction();
         digitalWrite(49,LOW);
         buzzer2.playBeep();
+        turnByAngleWithPID(180); 
       }
       else  if (no5==2){
         turnByAngleWithPID(90); 
@@ -283,4 +286,6 @@ void task_2(int no5){
       }
   }
 }
+runForwardWithoutPID(1000);
+bluee=gate;
 }

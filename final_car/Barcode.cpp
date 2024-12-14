@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "OLED_Display.h"
 #include "Barcode.h"
+#include "MotorControl.h"
 
 OLEDDisplay oledq;
 
@@ -14,10 +15,10 @@ OLEDDisplay oledq;
 #define ENB 9
 
 // Pins for encoders
-#define LEFT_ENCODER_A 19
-#define LEFT_ENCODER_B 18
-#define RIGHT_ENCODER_A 2
-#define RIGHT_ENCODER_B 3
+#define LEFT_ENCODER_A 18
+#define LEFT_ENCODER_B 19
+#define RIGHT_ENCODER_A 3
+#define RIGHT_ENCODER_B 2
 
 // IR sensor pins
 #define LEFT_SENSOR A5
@@ -100,17 +101,15 @@ void setuplikesetup() {
 
 long binaryToDecimal(int binary[], int size) {
     long decimal = 0;
-    
     for (int i = 0; i < size; i++) {
-        decimal = decimal * 2 + binary[i];
-    }
-    
-    return decimal;
-}
+        decimal = decimal * 2 + binary[i];}
+    return decimal;}
+
+
 void detection (){
 while (true){
   // Calculate error between encoder counts
-  long error = leftEncoderCountw - rightEncoderCountw;
+  long error = leftEncoderCountw - rightEncoderCount;
 
   // PID control (basic proportional control for simplicity)
   int correction = Kpw * error;
@@ -130,26 +129,26 @@ while (true){
   digitalWrite(RIGHT_MOTOR_BACKWARD, LOW);
 
   // Read IR sensor values
-  bool leftWhite = analogRead(LEFT_SENSOR) > 200; // Adjust threshold as needed
-  bool rightWhite = analogRead(RIGHT_SENSOR) > 200; // Adjust threshold as needed
+  int leftWhite = analogRead(LEFT_SENSOR) > 100; // Adjust threshold as needed
+  int rightWhite = analogRead(RIGHT_SENSOR) > 100; // Adjust threshold as needed
 
   if ((leftWhite || rightWhite) && !wasWhite) {
     // Transition to white detected
     wasWhite = true;
-    startEncoderCount = (leftEncoderCountw + rightEncoderCountw) / 2;
+    startEncoderCount = (leftEncoderCount + rightEncoderCount) / 2;
   } else if (!(leftWhite || rightWhite) && wasWhite) {
     // Transition to black detected
     wasWhite = false;
-    long endEncoderCount = (leftEncoderCountw + rightEncoderCountw) / 2;
+    long endEncoderCount = (leftEncoderCount + rightEncoderCount) / 2;
     long count = endEncoderCount - startEncoderCount;
 
     // Determine bin value
-    int bin = (count > 1000) ? 1 : 0;
+    int bin = (count > 500) ? 1 : 0;
 
     // Store bin value in array
     if (arrayIndex < maxArraySize) {
       binArray[arrayIndex++] = bin;
-      Serial.println(bin);
+      Serial.println(count);
     } else {
       stopMotorsw();
       oledq.displayArray(binArray,maxArraySize);// Display the array on the OLED

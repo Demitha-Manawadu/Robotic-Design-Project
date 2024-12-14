@@ -7,6 +7,7 @@
 extern int sensorValues[12];
 extern int sensor2Values[8];
 // Function prototypes
+void moveForwardUntilWhiteSquare();
 void runForwardWithSensorPIDw();
 void runForwardWithSensorPIDr();
 void runForwardWithSensorPID();

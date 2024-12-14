@@ -12,13 +12,13 @@ void followLineAndTurnWithSquareDetection() {
 
   // Loop for line-following with PID, handling junctions, corners, and square detection
   while (!cornerDetected && !squareDetected) {
-    runForwardWithSensorPIDr();  // Follow the line
+    runForwardWithSensorPID();  // Follow the line
 
     readSensors();  // Update sensor values
 
     // Check if all sensors detect black (indicating a black square)
     bool allSensorsDetectBlack = true;
-    for (int i = 2; i < NUM_SENSORS-2; i++) {
+    for (int i = 0; i < NUM_SENSORS; i++) {
       if (sensorValues[i] != 1) {  // If any sensor does not detect black, break
         allSensorsDetectBlack = false;
         break;
@@ -31,7 +31,7 @@ void followLineAndTurnWithSquareDetection() {
       while (millis() - squareDetectionStart < 200) {  // Confirmation period
         readSensors();
         allSensorsDetectBlack = true;
-        for (int i = 2; i < NUM_SENSORS-2; i++) {
+        for (int i = 0; i < NUM_SENSORS; i++) {
           if (sensorValues[i] != 0) {  // Any sensor not detecting black cancels the detection
             allSensorsDetectBlack = false;
             break;
@@ -52,8 +52,8 @@ void followLineAndTurnWithSquareDetection() {
 
     // Existing corner and 4-way junction logic here
     // Check for a 4-way junction: both left and right detect the line briefly
-    if (sensorValues[3] == 1 && sensorValues[4] == 1 && sensorValues[5] == 1 &&
-        sensorValues[NUM_SENSORS - 3] == 1 && sensorValues[NUM_SENSORS - 4] == 1) {
+    if (sensorValues[3] == 1 && sensorValues[4] == 1 &&
+        sensorValues[7] == 1 && sensorValues[8] == 1) {
       // Detected a 4-way junction, continue forward without turning
       runForwardWithoutPID(250);
       delay(200);  // Brief delay to pass the junction
@@ -61,7 +61,7 @@ void followLineAndTurnWithSquareDetection() {
     }
 
     // Check for persistent left corner detection
-    bool leftCornerConfirmed = sensorValues[4] == 1 && sensorValues[5] == 1 && sensorValues[2] == 1 && sensorValues[3] == 1;
+    bool leftCornerConfirmed = sensorValues[6] == 1 && sensorValues[5] == 1 && sensorValues[4] == 1 && sensorValues[3] == 1;
     unsigned long leftDetectionTime = millis();
 
     if (leftCornerConfirmed) {
@@ -70,7 +70,7 @@ void followLineAndTurnWithSquareDetection() {
       while ((millis() - leftDetectionTime) < 150) {  // 150 ms confirmation window
         moveForward(180, 180);
         readSensors();
-        if ((sensorValues[2] == 1 && sensorValues[3] == 1 && sensorValues[8] == 1 && sensorValues[9] == 1)) {
+        if ((sensorValues[4] == 1 && sensorValues[3] == 1 && sensorValues[9] == 1  && sensorValues[8] == 1)) {
           leftCornerConfirmed = false;
           moveForward(0, 0);
           break;  // Exit if the corner is not persistent
@@ -89,7 +89,7 @@ void followLineAndTurnWithSquareDetection() {
     }
 
     // Check for persistent right corner detection
-    bool rightCornerConfirmed = sensorValues[NUM_SENSORS - 5] == 1 && sensorValues[NUM_SENSORS - 6] == 1 && sensorValues[NUM_SENSORS - 3] == 1 && sensorValues[NUM_SENSORS - 4] == 1;
+    bool rightCornerConfirmed = sensorValues[8] == 1 && sensorValues[9] == 1 && sensorValues[5] == 1 && sensorValues[6] == 1;
     unsigned long rightDetectionTime = millis();
 
     if (rightCornerConfirmed) {
@@ -98,7 +98,7 @@ void followLineAndTurnWithSquareDetection() {
       while ((millis() - rightDetectionTime) < 150) {  // 150 ms confirmation window
         moveForward(180, 180);
         readSensors();
-        if ((sensorValues[2] == 1 && sensorValues[3] == 1 && sensorValues[7] == 1 && sensorValues[8] == 1 && sensorValues[5] == 1)) {
+        if ((sensorValues[4] == 1 && sensorValues[3] == 1 && sensorValues[9] == 1  && sensorValues[8] == 1)) {
           rightCornerConfirmed = false;
           moveForward(0, 0);
           break;  // Exit if the corner is not persistent

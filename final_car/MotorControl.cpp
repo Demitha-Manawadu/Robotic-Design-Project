@@ -102,7 +102,7 @@ void moveBackward(int leftSpeed, int rightSpeed) {
 }
 void turnByAngleWithPID(int angle) {
   // Convert the angle into target encoder counts
-  long encoderTarget = abs(angle) * 11.7;
+  long encoderTarget = abs(angle) * 11.75;
   leftEncoderCount = 0;
   rightEncoderCount = 0;
 
@@ -188,4 +188,102 @@ void runForwardWithoutPID_1(long targetCount) {
     stopMotors();
 }
     // Stop the motors after reaching the target count
-   
+   void moveForwardWithEncoders() {
+    // Reset encoder counts
+    leftEncoderCount = 0;
+    rightEncoderCount = 0;
+
+    // PID variables
+    float integral = 0;
+    float lastError = 0;
+
+    // Base speed for the motors
+    int baseSpeed = 150; // Adjust as needed
+
+    while (true) {
+        // Calculate the error between left and right encoder counts
+        long error = leftEncoderCount - rightEncoderCount;
+
+        // Compute PID values
+        integral += error;
+        float derivative = error - lastError;
+        float output = 1 * error + 0 * integral + 1 * derivative;
+        lastError = error;
+
+        // Adjust motor speeds based on PID output
+        int leftSpeed = baseSpeed + output;
+        int rightSpeed = baseSpeed - output;
+
+        // Constrain motor speeds to valid range
+        leftSpeed = constrain(leftSpeed, 0, 255);
+        rightSpeed = constrain(rightSpeed, 0, 255);
+
+        // Move forward with calculated speeds
+        moveForward(leftSpeed, rightSpeed);
+
+        // Small delay for stability
+        delay(10);
+    }
+
+    // Stop motors after reaching the target
+    stopMotors();
+ }
+// int readFloorBarcode() {
+//     Serial.println("Starting barcode reading...");
+//     int binaryValue = 0;
+
+//     // We will read 12 lines:
+//     for (int i = 0; i < NUM_LINES; i++) {
+//         // Shift binary left by 1 for the next bit
+//         binaryValue <<= 1; 
+
+//         // Move forward and wait until line start
+//         Serial.println("Waiting for line start...");
+//         long startCount;
+//         while (true) {
+//             moveForward(120, 120); // Keep moving forward
+//             int val = analogRead(mainIRSensorPin);
+//             if (val > LINE_DETECT_THRESHOLD) {
+//                 // Line started
+//                 startCount = leftEncoderCount;
+//                 Serial.println("Line detected!");
+//                 break;
+//             }
+//         }
+
+//         // Now wait for line to end
+//         while (true) {
+//             moveForward(120, 120); // Keep moving forward
+//             int val = analogRead(mainIRSensorPin);
+//             if (val < LINE_DETECT_THRESHOLD) {
+//                 // Line ended
+//                 break;
+//             }
+//           }
+
+//         long endCount = leftEncoderCount;
+//         long lineWidth = endCount - startCount;
+//         Serial.print("Line width (enc counts): ");
+//         Serial.println(lineWidth);
+
+//         bool isWide = (lineWidth >= WIDE_LINE_THRESHOLD);
+//         if (isWide) {
+//             Serial.println("This line is WIDE (bit = 1)");
+//             binaryValue |= 1;
+//         } else {
+//             Serial.println("This line is THIN (bit = 0)");
+//         }
+//     }
+
+//     // Finished reading all lines
+//     Serial.print("Binary Value: ");
+//     for (int i = NUM_LINES - 1; i >= 0; i--) {
+//         Serial.print((binaryValue >> i) & 1);
+//     }
+//     Serial.println();
+
+//     Serial.print("Decimal Value: ");
+//     Serial.println(binaryValue);
+
+//     return binaryValue;
+// }

@@ -14,8 +14,11 @@ ButtonReader myBtnReader;
 Buzzer buzzer;
 //ColorSensor colorSensor;
 OLEDDisplay oled; // single OLED object
-
+#include "coindrop.h"
+#include "Barcode.h"
 void setup() {
+  void setuplikesetup();
+  setupsen() ;
   setupServo();
   Serial.begin(9600);
   myBtnReader.initPins();

@@ -33,7 +33,7 @@ void ColorSensor::detectColor() {
     delay(100);
     int blueFrequency = pulseIn(OUT, LOW);
 
-    bluee = true; // Default state
+    bluee = false; // Default state
 
     // Determine color and control LEDs
     if (redFrequency < redThreshold && blueFrequency > blueThreshold) {

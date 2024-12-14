@@ -3,9 +3,9 @@
 #include "MotorControl.h"
 
 // PID constants
-float Kp = .6;  // Proportional constant
+float Kp = .8;  // Proportional constant
 float Ki = 0.0;  // Integral constant
-float Kd = 1.0;  // Derivative constant
+float Kd = 1.5;  // Derivative constant
 float Kp2 = 1;  // Proportional constant
 float Ki2 = 0.0;  // Integral constant
 float Kd2 = 1.0;  // Derivative constant
@@ -169,4 +169,20 @@ void runBackwardWithEncoderPID() {
     // Command the motors
     moveBackward(leftSpeed, rightSpeed);
     delay(10);
+}
+bool isWhiteSquareDetected() {
+  readSensors();
+    // Assuming a 12-sensor array where all sensors return 1 when detecting white
+    for (int i = 0; i < 12; i++) {
+        if (sensorValues[i] != 1) {
+            return false; // If any sensor does not detect white, return false
+        }
+    }
+    return true; // All sensors detect white
+}
+void moveForwardUntilWhiteSquare() {
+    while (!isWhiteSquareDetected()) {
+       runForwardWithSensorPID();
+    }
+    stopMotors(); // Ensure the robot stops once the white square is detected
 }

@@ -3,6 +3,10 @@
 void task6();
 void setupServo();
 void lowerGripper();
+void chamber();
+void liftGripper();
+int readSharpAnalog();
+extern int gate;
 extern bool bluee;
 extern int whiteline;
 // extern volatile long leftEncoderCount = 0;
