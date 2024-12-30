@@ -1,41 +1,81 @@
-# Robotic Design Project - Multi-Task Robot
+# Robotic Design Project - Multi-Task Robot EN2533
 
-## Introduction
-This project is focused on designing and building a robot capable of performing various tasks in an autonomous environment. The robot is equipped with sensors and actuators to handle tasks such as bar counting, line navigation, maze navigation, box manipulation, and more. This robot is designed for use in [name of competition or event, if applicable] and follows a modular design approach to handle different tasks sequentially.
+## project overview 
+This project is focused on designing and building a robot capable of performing various tasks in an autonomous environment. The robot is equipped with sensors and actuators to handle tasks such as bar counting, line navigation, maze navigation, box manipulation, and more. This robot is designed for use in the EN2533 - Robot Design and Competition module and follows a modular design approach to handle different tasks sequentially.
 
-The robot uses an Arduino as the control unit and includes a set of sensors (e.g., ultrasonic, infrared) for navigation and object manipulation.
+![WhatsApp Image 2024-12-21 at 21 46 30_15445ea4](https://github.com/user-attachments/assets/7a56f363-59bf-4437-a68b-79eaba67c594)
 
-## Tasks to be Accomplished
 
-The robot is programmed to complete the following tasks:
 
-1. **Bar Counting**: Detect and count bars along a path.
-2. **Line Navigation**: Follow a solid line to navigate.
-3. **Maze Navigation**: Navigate through a maze and find the exit.
-4. **Box Manipulation**: Manipulate boxes (pick and place or push).
-5. **Color Line Following**: Follow a colored line on the ground.
-6. **Dashed Line Following**: Follow a dashed line using the right sensors.
-7. **Portal Navigation**: Detect and navigate through portals or gateways.
-8. **Box Arrangement**: Arrange boxes in a specific order.
-9. **Hidden Task and Chamber Insertion**: Solve hidden tasks or perform actions in specific chambers.
-10. **Coin Drop**: Drop a coin into a specific target area.
-11. **Task Completion**: Ensure all tasks are completed successfully.
+## Features
+
+- 🚗 **Line Navigation:** Navigate predefined paths using IR sensor arrays and color sensors.
+- 🔢 **Bar Counting:** Detect and count horizontal bars placed along a predefined path.
+- 🧭 **Maze Navigation:** Grab a virtual box and navigate through a maze to place it in the target location.
+- 🤖 **Box Arrangement:** Arrange a set of boxes in ascending or descending order of height using a custom SolidWorks-designed mechanical robot arm powered by servo motors. A Sharp IR sensor integrated into the robotic gripper allows for height differentiation.
+- 🌈 **Color Line Following:** Follow a colored line on the ground using color sensors.
+- 📏 **Dashed Line Following:** Follow a dashed line using the IR sensors.
+- 🚪 **Portal Navigation:** Detect and navigate through portals or gateways.
+- 🕵️‍♂️ **Hidden Task and Chamber Insertion:** Solve a hidden task and insert a box inside a chamber.
+- 🪙 **Coin Drop:** Drop a coin into a specific target area.
+
+## Task-2024
+The full Task Documentation can be found in:
+[Task 2024 v1.1](https://online.uom.lk/mod/resource/view.php?id=432368)
+
+![image](https://github.com/user-attachments/assets/4f7ffe4b-5368-4e45-8c46-ff8df11e428c)
+
+
 
 ## Design Overview
 
-### Conceptual Design
-The robot consists of the following main components:
-- **Microcontroller**: Arduino Mega
-- **Motors**: DC motors controlled by an H-Bridge motor driver (e.g., L298N)
-- **Sensors**:
-  - **Ultrasonic Sensors**: For obstacle avoidance and maze navigation.
-  - **Infrared Sensors**: For line detection and line-following tasks.
-  - **Color Sensor**: For detecting colored lines.
-- **Actuators**: Servo motors for box manipulation and coin drop mechanisms.
-- **Power**: 12V battery.
+### Hardware requirements:
+Sensors
 
-### System Block Diagram
-(Optional) Include a block diagram of your system architecture showing the interconnection between sensors, motors, and the microcontroller.
+The robot employs various sensors for accurate detection and navigation, including:
+
+- **Ultrasonic Sensors:** Employed for detecting walls and chambers.
+- **Sharp IR Sensor:** Mounted on top for measuring distance, especially during portal navigation and for box height differentiation.
+- **TCS34725 Color Sensor:** Used for color detection in line following tasks.
+- **REKHA TCRT5000 Reflectance Sensor Array:** For precise line tracking.
+
+ **Actuators**
+- Robotic arm and gripper: Gripper mechanism and slider operations for lifting boxes are performed using two MG90S servo motors.
+
+**JGA25-370 DC motor**
+- integrated to the wheels of the robot.
+
+ **Microcontrollers**
+- Arduino Mega 2560- The microcontroller that controls all the functionalities of the robot
+
+
+
+### Mechanical Design
+
+The mechanical design of the robot was fully customized using SolidWorks, encompassing both the chassis and the robotic arm. The robotic arm, equipped with a gripper, utilizes a rack-and-pinion mechanism for precise linear movement, enabling efficient box grabbing, lifting, and dropping operations.
+
+The chassis features a two-layer acrylic board structure, mounted with spacers for stability. This compact design was carefully crafted to optimize space and ensure the robot can effectively carry out its tasks.
+![WhatsApp Image 2024-12-29 at 15 23 47_e17c57a6](https://github.com/user-attachments/assets/486dd6bb-67a7-4aad-bec2-bbbca92b563e)
+![WhatsApp Image 2024-12-29 at 15 19 25_0207914a](https://github.com/user-attachments/assets/3f2d229a-93eb-4e14-bb0d-99c6b06aea9a)
+![WhatsApp Image 2024-12-29 at 15 19 25_487d0368](https://github.com/user-attachments/assets/ad90bc2f-506b-4973-aa41-bd4042350150)
+
+## Algorithms
+
+The robot’s navigation algorithms rely on real-time data from the sensors. Each task follows a defined sequence, enabling the robot to adapt its actions based on sensor inputs. The algorithms include:
+
+### Barcode Detection
+- Measures duration exposed to white segments to determine the end of the barcode.
+
+### Box Handling
+- Includes height measurement, grabbing, lifting, and placing based on color-coded signals.
+
+### Path Navigation
+- Controls the robot’s movement along predefined paths while avoiding obstacles.
+
+##Overall Strategy
+The full documentation for the Overall strategy can be found in:
+
+
 
 ## Specifications
 - **Dimensions**: [e.g., 30 cm x 25 cm x 10 cm]
@@ -44,26 +84,9 @@ The robot consists of the following main components:
 - **Speed**: Max speed of 1 m/s
 - **Sensor Range**: Ultrasonic sensors up to 400 cm
 
+##Demo
 
-## Task Allocation
-- **Team Member 1**: [Name] - Responsible for designing the chassis, assembling motors, and sensors.
-- **Team Member 2**: [Name] - Developed the software for navigation, task execution, and debugging.
-- **Team Member 3**: [Name] - Worked on task algorithms (line-following, maze navigation, box manipulation).
 
-## Development Environment
-- **Programming Language**: C++ (Arduino IDE)
-- **Libraries**: `Servo`, `IRremote`, `NewPing`, `Adafruit_TCS3200` (for color sensor)
-- **Version Control**: Git, GitHub
-
-## Installation & Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/robotic-design-project.git
-   cd robotic-design-project
-max speed of 1 m/s]
-- **Sensor Range**: [e.g., ultrasonic sensor with a range of 2-400 cm]
-- **Control System**: [e.g., PID control for motor steering]
 
 ## Task Allocation
 Provide an overview of the tasks allocated to different team members. This section can be organized by team member or task type. Example:
