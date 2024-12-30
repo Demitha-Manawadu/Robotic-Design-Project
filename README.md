@@ -56,7 +56,9 @@ The mechanical design of the robot was fully customized using SolidWorks, encomp
 
 The chassis features a two-layer acrylic board structure, mounted with spacers for stability. This compact design was carefully crafted to optimize space and ensure the robot can effectively carry out its tasks.
 ![WhatsApp Image 2024-12-29 at 15 23 47_e17c57a6](https://github.com/user-attachments/assets/486dd6bb-67a7-4aad-bec2-bbbca92b563e)
+
 ![WhatsApp Image 2024-12-29 at 15 19 25_0207914a](https://github.com/user-attachments/assets/3f2d229a-93eb-4e14-bb0d-99c6b06aea9a)
+
 ![WhatsApp Image 2024-12-29 at 15 19 25_487d0368](https://github.com/user-attachments/assets/ad90bc2f-506b-4973-aa41-bd4042350150)
 
 ## Algorithms
