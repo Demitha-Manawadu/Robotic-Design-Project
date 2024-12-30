@@ -3,7 +3,8 @@
 ## project overview 
 This project is focused on designing and building a robot capable of performing various tasks in an autonomous environment. The robot is equipped with sensors and actuators to handle tasks such as bar counting, line navigation, maze navigation, box manipulation, and more. This robot is designed for use in the EN2533 - Robot Design and Competition module and follows a modular design approach to handle different tasks sequentially.
 
-![WhatsApp Image 2024-12-21 at 21 46 30_15445ea4](https://github.com/user-attachments/assets/7a56f363-59bf-4437-a68b-79eaba67c594)                ![WhatsApp Image 2024-12-21 at 21 46 29_c666b268](https://github.com/user-attachments/assets/768e8898-beae-4f2b-9378-4ec5b5f7a29e)
+![WhatsApp Image 2024-12-21 at 21 46 30_15445ea4](https://github.com/user-attachments/assets/7a56f363-59bf-4437-a68b-79eaba67c594)               
+![WhatsApp Image 2024-12-21 at 21 46 29_c666b268](https://github.com/user-attachments/assets/768e8898-beae-4f2b-9378-4ec5b5f7a29e)
 
 
 ## Features
@@ -17,12 +18,6 @@ This project is focused on designing and building a robot capable of performing 
 - 🚪 **Portal Navigation:** Detect and navigate through portals or gateways.
 - 🕵️‍♂️ **Hidden Task and Chamber Insertion:** Solve a hidden task and insert a box inside a chamber.
 - 🪙 **Coin Drop:** Drop a coin into a specific target area.
-
-## Task-2024
-The full Task Documentation can be found in:
-[Task 2024 v1.1](https://online.uom.lk/mod/resource/view.php?id=432368)
-
-![image](https://github.com/user-attachments/assets/4f7ffe4b-5368-4e45-8c46-ff8df11e428c)
 
 
 
@@ -64,9 +59,18 @@ The chassis features a two-layer acrylic board structure, mounted with spacers f
 
 The robot’s navigation algorithms rely on real-time data from the sensors. Each task follows a defined sequence, enabling the robot to adapt its actions based on sensor inputs. The algorithms include:
 
+## Task-2024
+The full Task Documentation can be found in:
+[Task 2024 v1.1](https://online.uom.lk/mod/resource/view.php?id=432368)
+
+![image](https://github.com/user-attachments/assets/4f7ffe4b-5368-4e45-8c46-ff8df11e428c)
+
 ### task 01
 ### Counting and Line Navigation
 The robot will travel along a straight path at a steady pace, guided by encoder feedback. As it encounters a barcode, it will measure the duration that the central IR sensor is exposed to white segments. This duration will be compared to a predetermined threshold, and if it exceeds the threshold, the value 1 will be recorded; otherwise, 0 will be stored. The robot will continue this detection process until three consecutive 0s are detected, indicating the end of the barcode.
+
+![image](https://github.com/user-attachments/assets/3bdcc0bd-dae0-4d4a-b734-00ec39e764e4)
+
 
 ### task 02
 ### Virtual Box Movement
@@ -75,6 +79,9 @@ If the Output is 0: The robot approaches the virtual box, grabs it, and moves fo
 The robot identifies which of the two squares (blue or red) is free from gate, grabs the box, and navigates through the maze, ensuring it places the box at the appropriate location.
 
 Movements are carefully controlled accoriding to the given constraints. The optimal path will be hardcoded and the encoders and sensor array with PD will be used for correct navigation.
+
+![image](https://github.com/user-attachments/assets/c0cdbbd9-ef66-414c-9092-fa4d3ee1d0ee)
+
 
 
 ### task 03
@@ -85,6 +92,9 @@ First, we calibrate the REKHA array to differentiate between the line and the ba
 
 The REKHA array keeps the robot centered on the path, while the TCS34725 verifies it's following the correct color.
 
+![image](https://github.com/user-attachments/assets/5b40057c-b353-4f27-b726-fb0e1cd15086)
+
+
 
 ### task 04
 ### Dotted Line Navigation
@@ -94,6 +104,9 @@ It maintains a forward stare when detecting black, and upon detecting the white 
 
 The robot stops when all sensors detect the white line simultaneously, signaling the end of the dashed line segment
 
+![image](https://github.com/user-attachments/assets/15201817-8344-48cb-a39f-e4b60a210b69)
+
+
 ### task 05
 ### Portal Navigation
 For portal navigation, the ToF sensor is mounted on top of the robot (which we are going to use for height mesuring), continuously reading the distance to the gate. 
@@ -102,16 +115,23 @@ As the gate is opening and the distance starts to decrease, the robot uses this 
 The frequent readings from the ToF sensor allow the system to  passes through the gate without collision. 
 And for more accuracy we will use the ultrasonic sensor reading which is mounted in front of the robot as an additional data whether there is no obstacle in front of it.
 
+![image](https://github.com/user-attachments/assets/012867a9-86f8-46b3-94ed-5df48ed2c334)
+
 ### task 06
 ### Box Arrangement
 When robot moves near to boxes it measures the height of each box using sharp IR sensor which is attached to the up down mechanism of the robot arm. It can differenciate the heights of 5,10,15 boxes.
 
 Then accoring to the paths we define robot will grab the each box and place them according to the ascending or descending order depending on the colour it detected.
 
+![image](https://github.com/user-attachments/assets/4c62954c-45f7-4a66-ad31-e93b77477629)
+
 
 ### task 07
 ### Hidden Task and Chamber Insertion
 The line following robot will navigate along a the path and grab the box at stage 7 using the gripper, an ultra sonic sensor will detect the chamber and the robot will stop precisely right infront of it, release the box, will close the gripper and push the box inside the chamber using the closed gripper.
+
+![image](https://github.com/user-attachments/assets/9ea790fe-4283-404c-8dfe-f736f8cec3f3)
+
 
 ### task 08
 ### Coin Drop and Task Completion
@@ -119,8 +139,11 @@ The robot will move in the uneven terrain and detect walls using an ultra sonic 
 
 once a cross is detected the robot will and the coin will be released on the cross using a sliding mechanism thats inbuilt in to the chassis of the robot
 
+![image](https://github.com/user-attachments/assets/e3efcc74-0031-4a54-9ba4-f4dcbe90c70b)
 
-##Demo
+
+
+
 
 
 
