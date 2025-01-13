@@ -157,7 +157,7 @@ Provide an overview of the tasks allocated to different team members.
   - Tasks: [task 6,task 7,Desinging the robot arm and chasis,implement the alogorithm for box arrangement,mounting the robot mechanism]
 
 - **Team Member 3**: [Wickramasinghe S.D-220701X]
-  - Tasks: [task 1,Power circuit designing and soldering,Assembling the robot ,Testing the robot behavior]
+  - Tasks: [task 1,Power circuit designing and soldering,Assembling the robot ,Testing the robot behavior, coin drop mechanism designing and implementing]
   - 
 - **Team Member 4**: [Gunasekara V.G.V-220193M]
   - Tasks: [Solidworks drawing for robot arm and chisis,Coding for task 6 and 7,assembling the robot arm]
