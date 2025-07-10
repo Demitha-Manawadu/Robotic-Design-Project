@@ -1,6 +1,11 @@
 # Robotic Design Project - EN2533
 
 ## project overview 
+
+# My Project
+
+This is  the Demo Video of the project - [here]( https://www.linkedin.com/posts/demitha-manawadu-9750452a4_robotics-engineering-innovation-activity-7279574753667858432-JbwE?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAElVKykB0R8vG_i6dsG5P5cV5DbX4BSlKJs).
+
 This project is focused on designing and building a robot capable of performing various tasks in an autonomous environment. The robot is equipped with sensors and actuators to handle tasks such as bar counting, line navigation, maze navigation, box manipulation, and more. This robot is designed for use in the EN2533 - Robot Design and Competition module and follows a modular design approach to handle different tasks sequentially.
 
 ![WhatsApp Image 2024-12-21 at 21 46 30_15445ea4](https://github.com/user-attachments/assets/7a56f363-59bf-4437-a68b-79eaba67c594)               
